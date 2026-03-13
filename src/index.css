@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Comic+Neue:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Architects+Daughter&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,13 +6,13 @@
 
 @layer base {
   :root {
-    --background: 40 33% 96%;
+    --background: 0 0% 100%;
     --foreground: 220 15% 20%;
 
-    --card: 40 40% 98%;
+    --card: 0 0% 99%;
     --card-foreground: 220 15% 20%;
 
-    --popover: 40 40% 98%;
+    --popover: 0 0% 99%;
     --popover-foreground: 220 15% 20%;
 
     --primary: 220 70% 55%;
@@ -21,7 +21,7 @@
     --secondary: 25 90% 58%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 40 20% 90%;
+    --muted: 220 10% 92%;
     --muted-foreground: 220 10% 45%;
 
     --accent: 145 55% 45%;
@@ -30,22 +30,19 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 75%;
-    --input: 220 15% 75%;
+    --border: 220 15% 80%;
+    --input: 220 15% 80%;
     --ring: 220 70% 55%;
 
     --radius: 0.5rem;
 
-    --doodle-yellow: 48 95% 65%;
-    --doodle-pink: 340 75% 65%;
-
-    --sidebar-background: 40 33% 94%;
+    --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 220 15% 20%;
     --sidebar-primary: 220 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 20% 90%;
+    --sidebar-accent: 220 10% 92%;
     --sidebar-accent-foreground: 220 15% 20%;
-    --sidebar-border: 220 15% 75%;
+    --sidebar-border: 220 15% 80%;
     --sidebar-ring: 220 70% 55%;
   }
 }
@@ -57,54 +54,39 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Comic Neue', cursive;
+    font-family: 'Architects Daughter', cursive;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Caveat', cursive;
+    font-family: 'Gaegu', cursive;
   }
 }
 
 @layer utilities {
-  .font-handwriting {
-    font-family: 'Caveat', cursive;
+  .font-heading {
+    font-family: 'Gaegu', cursive;
   }
 
-  .font-hand {
-    font-family: 'Patrick Hand', cursive;
-  }
-
-  .font-comic {
-    font-family: 'Comic Neue', cursive;
+  .font-body {
+    font-family: 'Architects Daughter', cursive;
   }
 
   .doodle-border {
     border: 2.5px solid hsl(220 15% 20%);
     border-radius: 12px 4px 16px 2px;
-    box-shadow: 3px 3px 0px hsl(220 15% 20% / 0.15);
+    box-shadow: 3px 3px 0px hsl(220 15% 20% / 0.12);
   }
 
   .doodle-border-blue {
     border: 2.5px solid hsl(220 70% 55%);
     border-radius: 12px 4px 16px 2px;
-    box-shadow: 3px 3px 0px hsl(220 70% 55% / 0.2);
+    box-shadow: 3px 3px 0px hsl(220 70% 55% / 0.15);
   }
 
   .doodle-border-orange {
     border: 2.5px solid hsl(25 90% 58%);
     border-radius: 12px 4px 16px 2px;
-    box-shadow: 3px 3px 0px hsl(25 90% 58% / 0.2);
-  }
-
-  .notebook-lines {
-    background-image: 
-      repeating-linear-gradient(
-        transparent,
-        transparent 31px,
-        hsl(220 70% 55% / 0.12) 31px,
-        hsl(220 70% 55% / 0.12) 32px
-      );
-    background-position: 0 8px;
+    box-shadow: 3px 3px 0px hsl(25 90% 58% / 0.15);
   }
 
   .sketch-underline {

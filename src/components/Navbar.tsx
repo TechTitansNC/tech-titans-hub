@@ -10,14 +10,14 @@ const Navbar = () => {
     >
       <div className="max-w-4xl mx-auto flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-2">
-          <span className="font-handwriting text-2xl font-bold text-primary">
+          <span className="font-heading text-2xl font-bold text-primary">
             Tech Titans
           </span>
-          <span className="font-hand text-sm text-muted-foreground">
+          <span className="font-body text-sm text-muted-foreground">
             #32795
           </span>
         </div>
-        <div className="flex items-center gap-5 font-hand text-base">
+        <div className="flex items-center gap-5 font-body text-base">
           <a href="#about" className="text-muted-foreground hover:text-primary transition-colors">
             About
           </a>
