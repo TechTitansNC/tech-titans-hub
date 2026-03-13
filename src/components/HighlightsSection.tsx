@@ -1,61 +1,60 @@
 import { motion } from "framer-motion";
-import { Bot, Lightbulb, Trophy } from "lucide-react";
 
 const highlights = [
   {
-    icon: Bot,
-    title: "ROBOT DESIGN",
-    description:
-      "Our robots are engineered for precision and power. We design, build, and program autonomous machines to tackle complex FLL challenges.",
+    emoji: "🤖",
+    title: "Robot Design",
+    description: "We engineer robots for precision and power — designing, building, and programming autonomous machines to tackle FLL challenges!",
+    borderClass: "doodle-border-blue",
   },
   {
-    icon: Lightbulb,
-    title: "INNOVATION PROJECT",
-    description:
-      "We identify real-world problems and create innovative solutions that make a difference in our community and beyond.",
+    emoji: "💡",
+    title: "Innovation Project",
+    description: "We find real-world problems and create innovative solutions that make a difference in our community and beyond.",
+    borderClass: "doodle-border-orange",
   },
   {
-    icon: Trophy,
-    title: "CORE VALUES",
-    description:
-      "Discovery, innovation, impact, inclusion, teamwork, and fun. These are the pillars that drive everything we do as Tech Titans.",
+    emoji: "🌟",
+    title: "Core Values",
+    description: "Discovery, innovation, impact, inclusion, teamwork, and fun — these pillars drive everything we do as Tech Titans!",
+    borderClass: "doodle-border",
   },
 ];
 
 const HighlightsSection = () => {
   return (
-    <section className="relative py-24 px-6">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative py-20 px-6 notebook-lines">
+      <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-14"
         >
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-accent text-glow-gold mb-4">
-            WHAT WE DO
+          <h2 className="font-handwriting text-5xl md:text-7xl font-bold text-secondary rotate-1">
+            What We Do
           </h2>
-          <div className="h-px w-24 bg-primary mx-auto" />
+          <svg width="100" height="12" viewBox="0 0 100 12" className="mx-auto mt-1">
+            <path d="M2 6 C25 2, 50 10, 75 4 C85 3, 95 7, 98 5" stroke="hsl(220 70% 55%)" strokeWidth="3" fill="none" strokeLinecap="round" />
+          </svg>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
           {highlights.map((item, i) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: i === 1 ? 1.5 : i === 2 ? -1 : -1.5 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
-              className="group relative border border-border bg-card/30 p-8 hover:border-accent/50 transition-all duration-300"
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              whileHover={{ scale: 1.03, rotate: 0 }}
+              className={`${item.borderClass} bg-card p-7 cursor-default`}
             >
-              {/* Top accent line */}
-              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <item.icon className="w-10 h-10 text-primary mb-6 group-hover:text-accent transition-colors" />
-              <h3 className="font-display text-lg font-bold text-foreground mb-3 tracking-wide">
+              <div className="text-4xl mb-4">{item.emoji}</div>
+              <h3 className="font-handwriting text-2xl font-bold text-foreground mb-2">
                 {item.title}
               </h3>
-              <p className="font-body text-muted-foreground leading-relaxed">
+              <p className="font-comic text-muted-foreground leading-relaxed text-sm">
                 {item.description}
               </p>
             </motion.div>
