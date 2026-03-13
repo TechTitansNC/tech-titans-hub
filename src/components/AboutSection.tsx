@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
+import { Users, CalendarDays, Bot, Trophy } from "lucide-react";
 
 const stats = [
-  { emoji: "👥", label: "Team Members", value: "10" },
-  { emoji: "📅", label: "Seasons", value: "3+" },
-  { emoji: "🤖", label: "Robots Built", value: "5" },
-  { emoji: "🏆", label: "Competitions", value: "8+" },
+  { icon: Users, label: "Team Members", value: "10" },
+  { icon: CalendarDays, label: "Seasons", value: "3+" },
+  { icon: Bot, label: "Robots Built", value: "5" },
+  { icon: Trophy, label: "Competitions", value: "8+" },
 ];
 
 const AboutSection = () => {
@@ -17,16 +18,16 @@ const AboutSection = () => {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <h2 className="font-handwriting text-5xl md:text-7xl font-bold text-primary mb-2 -rotate-1">
+          <h2 className="font-heading text-5xl md:text-7xl font-bold text-primary mb-2 -rotate-1">
             Who We Are
           </h2>
           <svg width="120" height="12" viewBox="0 0 120 12" className="mx-auto mb-8">
             <path d="M2 8 C30 2, 60 12, 90 4 C100 2, 110 6, 118 5" stroke="hsl(25 90% 58%)" strokeWidth="3" fill="none" strokeLinecap="round" />
           </svg>
-          <p className="font-comic text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="font-body text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             We are <span className="font-bold text-foreground">Tech Titans</span> — a passionate FIRST LEGO League team
             dedicated to innovation, teamwork, and creative problem-solving. We believe the future of the past is in our hands,
-            and we're building it one brick at a time! 🧱
+            and we're building it one brick at a time.
           </p>
         </motion.div>
 
@@ -42,11 +43,11 @@ const AboutSection = () => {
               whileHover={{ scale: 1.05, rotate: 0 }}
               className="doodle-border bg-card p-5 text-center cursor-default"
             >
-              <div className="text-3xl mb-2">{stat.emoji}</div>
-              <div className="font-handwriting text-3xl md:text-4xl font-bold text-primary">
+              <stat.icon className="w-7 h-7 text-secondary mx-auto mb-2" />
+              <div className="font-heading text-3xl md:text-4xl font-bold text-primary">
                 {stat.value}
               </div>
-              <div className="font-hand text-sm text-muted-foreground">
+              <div className="font-body text-sm text-muted-foreground">
                 {stat.label}
               </div>
             </motion.div>

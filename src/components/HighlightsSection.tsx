@@ -1,20 +1,21 @@
 import { motion } from "framer-motion";
+import { Bot, Lightbulb, Heart } from "lucide-react";
 
 const highlights = [
   {
-    emoji: "🤖",
+    icon: Bot,
     title: "Robot Design",
     description: "We engineer robots for precision and power — designing, building, and programming autonomous machines to tackle FLL challenges!",
     borderClass: "doodle-border-blue",
   },
   {
-    emoji: "💡",
+    icon: Lightbulb,
     title: "Innovation Project",
     description: "We find real-world problems and create innovative solutions that make a difference in our community and beyond.",
     borderClass: "doodle-border-orange",
   },
   {
-    emoji: "🌟",
+    icon: Heart,
     title: "Core Values",
     description: "Discovery, innovation, impact, inclusion, teamwork, and fun — these pillars drive everything we do as Tech Titans!",
     borderClass: "doodle-border",
@@ -23,7 +24,7 @@ const highlights = [
 
 const HighlightsSection = () => {
   return (
-    <section className="relative py-20 px-6 notebook-lines">
+    <section className="relative py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -31,7 +32,7 @@ const HighlightsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <h2 className="font-handwriting text-5xl md:text-7xl font-bold text-secondary rotate-1">
+          <h2 className="font-heading text-5xl md:text-7xl font-bold text-secondary rotate-1">
             What We Do
           </h2>
           <svg width="100" height="12" viewBox="0 0 100 12" className="mx-auto mt-1">
@@ -50,11 +51,11 @@ const HighlightsSection = () => {
               whileHover={{ scale: 1.03, rotate: 0 }}
               className={`${item.borderClass} bg-card p-7 cursor-default`}
             >
-              <div className="text-4xl mb-4">{item.emoji}</div>
-              <h3 className="font-handwriting text-2xl font-bold text-foreground mb-2">
+              <item.icon className="w-9 h-9 text-primary mb-4" />
+              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">
                 {item.title}
               </h3>
-              <p className="font-comic text-muted-foreground leading-relaxed text-sm">
+              <p className="font-body text-muted-foreground leading-relaxed text-sm">
                 {item.description}
               </p>
             </motion.div>
