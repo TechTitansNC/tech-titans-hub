@@ -13,16 +13,12 @@ export default {
       },
     },
     fontFamily: {
-      display: ['Orbitron', 'sans-serif'],
-      body: ['Rajdhani', 'sans-serif'],
-      mono: ['JetBrains Mono', 'monospace'],
+      handwriting: ['Caveat', 'cursive'],
+      hand: ['Patrick Hand', 'cursive'],
+      comic: ['Comic Neue', 'cursive'],
     },
     extend: {
       colors: {
-        glow: {
-          cyan: "hsl(var(--glow-cyan))",
-          gold: "hsl(var(--glow-gold))",
-        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -56,6 +52,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        doodle: {
+          yellow: "hsl(var(--doodle-yellow))",
+          pink: "hsl(var(--doodle-pink))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -74,25 +74,27 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-2deg)" },
+          "50%": { transform: "rotate(2deg)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        wiggle: "wiggle 3s ease-in-out infinite",
+        float: "float 4s ease-in-out infinite",
       },
     },
   },

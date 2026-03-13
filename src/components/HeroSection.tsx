@@ -1,40 +1,62 @@
 import { motion } from "framer-motion";
-import heroRobot from "@/assets/hero-robot.jpg";
+import heroRobot from "@/assets/hero-robot-doodle.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid">
-      {/* Background image overlay */}
-      <div className="absolute inset-0">
-        <img
-          src={heroRobot}
-          alt="Tech Titans Robot"
-          className="w-full h-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
-      </div>
-
-      {/* Animated border lines */}
-      <motion.div
-        className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent"
-        animate={{ opacity: [0.3, 1, 0.3] }}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden notebook-lines px-6">
+      {/* Scattered doodle decorations */}
+      <motion.span
+        className="absolute top-20 left-10 text-5xl select-none"
+        animate={{ rotate: [0, 10, -10, 0] }}
+        transition={{ duration: 4, repeat: Infinity }}
+      >
+        ⚙️
+      </motion.span>
+      <motion.span
+        className="absolute top-32 right-16 text-4xl select-none"
+        animate={{ y: [0, -10, 0] }}
         transition={{ duration: 3, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent"
-        animate={{ opacity: [0.3, 1, 0.3] }}
-        transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-      />
+      >
+        ⭐
+      </motion.span>
+      <motion.span
+        className="absolute bottom-32 left-20 text-4xl select-none"
+        animate={{ rotate: [0, -15, 15, 0] }}
+        transition={{ duration: 5, repeat: Infinity }}
+      >
+        🔧
+      </motion.span>
+      <motion.span
+        className="absolute bottom-40 right-24 text-3xl select-none"
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        💡
+      </motion.span>
 
-      <div className="relative z-10 text-center px-6 max-w-5xl">
-        {/* Team number */}
+      <div className="relative z-10 text-center max-w-4xl">
+        {/* Robot image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, rotate: -3 }}
+          animate={{ opacity: 1, scale: 1, rotate: -2 }}
+          transition={{ duration: 0.8 }}
+          className="mx-auto mb-8 w-56 h-56 md:w-72 md:h-72 animate-float"
+        >
+          <img
+            src={heroRobot}
+            alt="Tech Titans Robot Doodle"
+            className="w-full h-full object-cover doodle-border rounded-2xl"
+          />
+        </motion.div>
+
+        {/* Team badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <span className="font-mono text-sm tracking-[0.4em] text-primary uppercase border border-primary/30 px-4 py-1.5 border-glow-cyan">
+          <span className="font-hand text-lg tracking-wider text-primary doodle-border-blue px-4 py-1.5 inline-block bg-card rotate-1">
             FLL Team #32795
           </span>
         </motion.div>
@@ -43,39 +65,32 @@ const HeroSection = () => {
         <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="font-display text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-6 text-glow-cyan text-primary"
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="font-handwriting text-7xl md:text-9xl font-bold text-foreground mb-4 leading-none"
         >
-          TECH
-          <br />
-          <span className="text-accent text-glow-gold">TITANS</span>
+          Tech{" "}
+          <span className="text-primary sketch-underline decoration-secondary">
+            Titans
+          </span>
         </motion.h1>
 
         {/* Slogan */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="font-body text-xl md:text-2xl text-muted-foreground tracking-widest uppercase"
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="font-hand text-xl md:text-2xl text-muted-foreground italic -rotate-1"
         >
-          The future of the past is in our hands
+          ✏️ "The future of the past is in our hands" ✏️
         </motion.p>
 
-        {/* Decorative line */}
+        {/* Doodle arrow pointing down */}
         <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 1.5, delay: 1.2 }}
-          className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto mt-8 max-w-md"
-        />
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="mt-16"
-          animate={{ y: [0, 10, 0] }}
+          className="mt-12 text-4xl"
+          animate={{ y: [0, 12, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <div className="w-px h-12 bg-gradient-to-b from-primary to-transparent mx-auto" />
+          ↓
         </motion.div>
       </div>
     </section>

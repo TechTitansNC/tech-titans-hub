@@ -1,19 +1,21 @@
 const FooterSection = () => {
   return (
-    <footer className="border-t border-border py-12 px-6">
-      <div className="max-w-5xl mx-auto text-center">
-        <h3 className="font-display text-xl font-bold text-primary mb-2">
-          TECH TITANS
+    <footer className="border-t-2 border-dashed border-border py-10 px-6">
+      <div className="max-w-4xl mx-auto text-center">
+        <h3 className="font-handwriting text-3xl font-bold text-foreground mb-1">
+          Tech Titans ✌️
         </h3>
-        <p className="font-mono text-xs text-muted-foreground tracking-widest mb-1">
-          FLL TEAM #32795
+        <p className="font-hand text-sm text-muted-foreground">
+          FLL Team #32795
         </p>
-        <p className="font-body text-sm text-muted-foreground italic">
-          "The future of the past is in our hands"
+        <p className="font-comic text-sm text-muted-foreground italic mt-1">
+          "The future of the past is in our hands" ✏️
         </p>
-        <div className="h-px w-16 bg-primary/30 mx-auto my-6" />
-        <p className="font-mono text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Tech Titans. Powered by FIRST® LEGO® League.
+        <svg width="60" height="8" viewBox="0 0 60 8" className="mx-auto my-4">
+          <path d="M2 4 C15 1, 30 7, 45 3 C50 2, 55 5, 58 4" stroke="hsl(25 90% 58%)" strokeWidth="2" fill="none" strokeLinecap="round" />
+        </svg>
+        <p className="font-comic text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Tech Titans · Powered by FIRST® LEGO® League
         </p>
       </div>
     </footer>
