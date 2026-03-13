@@ -12,8 +12,17 @@ export default {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      display: ['Orbitron', 'sans-serif'],
+      body: ['Rajdhani', 'sans-serif'],
+      mono: ['JetBrains Mono', 'monospace'],
+    },
     extend: {
       colors: {
+        glow: {
+          cyan: "hsl(var(--glow-cyan))",
+          gold: "hsl(var(--glow-gold))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
