@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { Settings } from "lucide-react";
+
 const FooterSection = () => {
   return (
     <footer className="bg-gray-900 py-10 px-6">
@@ -12,9 +15,14 @@ const FooterSection = () => {
           "The future of the past is in our hands"
         </p>
         <div className="w-16 h-0.5 bg-blue-500 mx-auto my-4" />
-        <p className="text-xs text-gray-500">
-          &copy; {new Date().getFullYear()} Tech Titans &middot; Powered by FIRST&reg; LEGO&reg; League
-        </p>
+        <div className="flex items-center justify-center gap-3">
+          <p className="text-xs text-gray-500">
+            &copy; {new Date().getFullYear()} Tech Titans &middot; Powered by FIRST&reg; LEGO&reg; League
+          </p>
+          <Link to="/admin" className="text-gray-600 hover:text-gray-400 transition-colors" title="Admin">
+            <Settings size={14} />
+          </Link>
+        </div>
       </div>
     </footer>
   );
