@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Architects+Daughter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,44 +6,44 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 220 15% 20%;
+    --background: 0 0% 15%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 99%;
-    --card-foreground: 220 15% 20%;
+    --card: 0 0% 20%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 99%;
-    --popover-foreground: 220 15% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 220 70% 55%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 25 90% 58%;
+    --secondary: 0 0% 0%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 10% 92%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 217 10% 25%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 145 55% 45%;
+    --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 80%;
-    --input: 220 15% 80%;
-    --ring: 220 70% 55%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 217 91% 60%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 220 15% 20%;
-    --sidebar-primary: 220 70% 55%;
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 10% 92%;
-    --sidebar-accent-foreground: 220 15% 20%;
-    --sidebar-border: 220 15% 80%;
-    --sidebar-ring: 220 70% 55%;
+    --sidebar-accent: 217 20% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -54,45 +54,6 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Architects Daughter', cursive;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Gaegu', cursive;
-  }
-}
-
-@layer utilities {
-  .font-heading {
-    font-family: 'Gaegu', cursive;
-  }
-
-  .font-body {
-    font-family: 'Architects Daughter', cursive;
-  }
-
-  .doodle-border {
-    border: 2.5px solid hsl(220 15% 20%);
-    border-radius: 12px 4px 16px 2px;
-    box-shadow: 3px 3px 0px hsl(220 15% 20% / 0.12);
-  }
-
-  .doodle-border-blue {
-    border: 2.5px solid hsl(220 70% 55%);
-    border-radius: 12px 4px 16px 2px;
-    box-shadow: 3px 3px 0px hsl(220 70% 55% / 0.15);
-  }
-
-  .doodle-border-orange {
-    border: 2.5px solid hsl(25 90% 58%);
-    border-radius: 12px 4px 16px 2px;
-    box-shadow: 3px 3px 0px hsl(25 90% 58% / 0.15);
-  }
-
-  .sketch-underline {
-    text-decoration: underline;
-    text-decoration-style: wavy;
-    text-underline-offset: 6px;
-    text-decoration-thickness: 2px;
+    font-family: 'Inter', sans-serif;
   }
 }

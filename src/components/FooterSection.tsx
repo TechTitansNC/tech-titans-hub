@@ -1,21 +1,19 @@
 const FooterSection = () => {
   return (
-    <footer className="border-t-2 border-dashed border-border py-10 px-6">
-      <div className="max-w-4xl mx-auto text-center">
-        <h3 className="font-heading text-3xl font-bold text-foreground mb-1">
+    <footer className="bg-gray-900 py-10 px-6">
+      <div className="max-w-6xl mx-auto text-center">
+        <h3 className="text-2xl font-bold text-white mb-1">
           Tech Titans
         </h3>
-        <p className="font-body text-sm text-muted-foreground">
+        <p className="text-sm text-gray-400">
           FLL Team #32795
         </p>
-        <p className="font-body text-sm text-muted-foreground italic mt-1">
+        <p className="text-sm text-gray-400 italic mt-1">
           "The future of the past is in our hands"
         </p>
-        <svg width="60" height="8" viewBox="0 0 60 8" className="mx-auto my-4">
-          <path d="M2 4 C15 1, 30 7, 45 3 C50 2, 55 5, 58 4" stroke="hsl(25 90% 58%)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-        <p className="font-body text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Tech Titans · Powered by FIRST® LEGO® League
+        <div className="w-16 h-0.5 bg-blue-500 mx-auto my-4" />
+        <p className="text-xs text-gray-500">
+          &copy; {new Date().getFullYear()} Tech Titans &middot; Powered by FIRST&reg; LEGO&reg; League
         </p>
       </div>
     </footer>
