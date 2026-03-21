@@ -172,3 +172,130 @@ src/
 - Admin panel uses same dark theme as rest of site
 - Tabs layout: Team Members | Page Content | Stats
 
+## Admin Panel Revamp — PenPot-Integrated Visual Editor
+
+### Context
+PenPot's core editor (workspace, viewport, sidebar, toolbars) is written in **ClojureScript** and cannot be imported into React/TypeScript. However, PenPot's repo contains a standalone **`@penpot/text-editor`** written in plain JavaScript — a rich text editor with selection control, inline styling, clipboard support, and paragraph management. This is the one usable component from PenPot's codebase.
+
+The revamp replaces the current form-based admin panel with a **visual page editor** that:
+1. Uses PenPot's `TextEditor` for rich inline text editing
+2. Mirrors PenPot's UI layout (left sidebar for page/section nav, center canvas preview, right sidebar for properties)
+3. Embeds a PenPot instance via iframe for full design work
+
+### Phase A — Foundation
+
+#### A.1: Copy PenPot TextEditor into project
+- Copy `/tmp/penpot/frontend/text-editor/src/editor/` into `src/lib/penpot-editor/`
+- Only the JS editor code (no playground, no tests, no WASM)
+- Create a React wrapper component `PenPotTextEditor.tsx` that mounts the `TextEditor` class onto a DOM ref
+- Wrapper accepts `value` (HTML string) and `onChange` callback
+
+#### A.2: Create visual editor shell layout
+- New component: `src/components/admin/EditorLayout.tsx`
+- PenPot-inspired layout:
+  - **Left sidebar** (240px): page list + section tree for selected page
+  - **Center panel**: live preview canvas showing the selected page section
+  - **Right sidebar** (300px): property editor panel for the selected element
+  - **Top toolbar**: save, reset, preview, logout buttons
+- Dark theme matching PenPot's UI (gray-900 bg, subtle borders)
+
+#### A.3: Build page/section navigation (left sidebar)
+- List all site pages: Home, About, Team, Innovation, Robot, Core Values
+- Each page expands to show its editable sections (e.g., About → "Paragraph 1", "Paragraph 2", "Stats")
+- Clicking a section loads it into the center canvas and right sidebar
+- Active page/section highlighted in blue
+
+### Phase B — Center Canvas & Live Preview
+
+#### B.1: Build canvas preview component
+- `src/components/admin/CanvasPreview.tsx`
+- Renders a scaled-down live preview of the selected page section
+- Uses the actual page component markup (not a screenshot) wrapped in a scaled container
+- Shows a bounding box around the currently selected editable element
+- Click-to-select: clicking text in the preview selects it for editing in the right sidebar
+
+#### B.2: Integrate PenPot TextEditor into canvas
+- When an editable text element is clicked in the canvas, activate PenPot's `TextEditor` inline on that element
+- Support inline formatting (bold, italic) via the TextEditor's built-in commands
+- On blur/deselect, save the edited content back to `siteData`
+
+#### B.3: Add zoom and pan controls
+- Zoom slider (50%–200%) in the top toolbar
+- Fit-to-width button
+- Scroll to pan within the canvas area
+
+### Phase C — Right Sidebar Property Editor
+
+#### C.1: Text properties panel
+- When a text section is selected:
+  - PenPot TextEditor for the content itself
+  - Font size, weight, color pickers (mapped to Tailwind classes)
+  - Alignment controls (left, center, right)
+- Changes reflected live in the canvas preview
+
+#### C.2: Team members panel
+- When "Team Members" section is selected:
+  - List of members with inline name/role editing
+  - Add/remove member buttons
+  - Drag-to-reorder (optional)
+
+#### C.3: Stats & scores panel
+- When stats/scores section is selected:
+  - Input fields for each stat value
+  - Live preview updates as values change
+
+### Phase D — PenPot Instance Integration
+
+#### D.1: PenPot embed tab
+- Tab in left sidebar: "Design Studio"
+- Embeds PenPot cloud (design.penpot.app) or self-hosted instance via iframe
+- Admin pastes their PenPot project share URL
+- URL persisted in `localStorage`
+
+#### D.2: PenPot design reference panel
+- Split view: PenPot design on one side, site preview on the other
+- Allows admins to reference designs while editing content
+
+### Phase E — Polish & Wiring
+
+#### E.1: Wire all pages to read from visual editor data
+- Ensure all public pages use `getSiteData()` (already done)
+- Validate that visual editor changes propagate correctly to all pages
+- Add undo support (store last 10 states in memory)
+
+#### E.2: Add page management
+- "Add Custom Page" feature: admin can create a new page with a title and sections
+- Custom pages rendered with a generic template
+- New pages automatically added to navbar and router
+
+#### E.3: Import/Export
+- Export site data as JSON file (download)
+- Import site data from JSON file (upload)
+- Useful for backup/restore and moving between browsers
+
+### File Structure (new/modified files)
+```
+src/
+  lib/
+    penpot-editor/          (copied from PenPot repo — JS text editor)
+      TextEditor.js
+      Event.js
+      commands/
+      controllers/
+      content/
+      clipboard/
+      layout/
+  components/
+    admin/
+      EditorLayout.tsx      (main editor shell)
+      CanvasPreview.tsx      (live preview panel)
+      LeftSidebar.tsx        (page/section navigation)
+      RightSidebar.tsx       (property editor)
+      TopToolbar.tsx         (save, reset, preview, logout)
+      PenPotTextEditor.tsx   (React wrapper for PenPot TextEditor)
+      TeamMembersPanel.tsx   (team member editing)
+      StatsPanel.tsx         (stats/scores editing)
+  pages/
+    AdminDashboard.tsx       (rewrite — visual editor)
+```
+

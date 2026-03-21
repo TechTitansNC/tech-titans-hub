@@ -1,352 +1,397 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  Users, FileText, BarChart3, Palette, LogOut, Plus, Trash2, Save, RotateCcw, Check,
-} from "lucide-react";
-import PageLayout from "@/components/PageLayout";
 import {
   getSiteData, saveSiteData, resetSiteData, defaultSiteData,
-  type SiteData, type TeamMember,
+  createBlock, type SiteData, type PageData, type Block, type BlockType,
 } from "@/lib/siteData";
+import BlockRenderer from "@/components/BlockRenderer";
+import BlockPropertyEditor from "@/components/admin/BlockPropertyEditor";
+import {
+  Save, RotateCcw, LogOut, Check, Undo2, Redo2, ExternalLink,
+  Plus, Trash2, ChevronUp, ChevronDown, Copy, GripVertical, Eye, EyeOff,
+  Download, Upload, Palette, FileText, Layout,
+  Type, Image, MousePointer, Minus, Square, Columns, Quote, Flag, BarChart3,
+  Users, Heart, Zap, AlertCircle, X,
+} from "lucide-react";
 
-type Tab = "team" | "content" | "stats" | "penpot";
+const MAX_UNDO = 30;
 
-const tabs: { id: Tab; label: string; icon: typeof Users }[] = [
-  { id: "team", label: "Team Members", icon: Users },
-  { id: "content", label: "Page Content", icon: FileText },
-  { id: "stats", label: "Stats & Scores", icon: BarChart3 },
-  { id: "penpot", label: "PenPot Design", icon: Palette },
+const BLOCK_PALETTE: { type: BlockType; label: string; icon: typeof Type }[] = [
+  { type: "hero", label: "Hero Banner", icon: Layout },
+  { type: "heading", label: "Heading", icon: Type },
+  { type: "text", label: "Text Block", icon: FileText },
+  { type: "image", label: "Image", icon: Image },
+  { type: "button", label: "Button", icon: MousePointer },
+  { type: "divider", label: "Divider", icon: Minus },
+  { type: "spacer", label: "Spacer", icon: Square },
+  { type: "cards", label: "Cards Grid", icon: Columns },
+  { type: "stats", label: "Stats", icon: BarChart3 },
+  { type: "team", label: "Team Grid", icon: Users },
+  { type: "coreValues", label: "Core Values", icon: Heart },
+  { type: "twoColumn", label: "Two Columns", icon: Columns },
+  { type: "iconFeatures", label: "Icon Features", icon: Zap },
+  { type: "quote", label: "Quote", icon: Quote },
+  { type: "banner", label: "Banner / CTA", icon: Flag },
 ];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<Tab>("team");
   const [data, setData] = useState<SiteData>(getSiteData);
+  const [activePageId, setActivePageId] = useState(data.pages[0]?.id || "");
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [zoom, setZoom] = useState(85);
+  const [leftTab, setLeftTab] = useState<"pages" | "blocks" | "penpot" | "io">("pages");
+  const [showPalette, setShowPalette] = useState(false);
+  const [importStatus, setImportStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const save = () => {
-    saveSiteData(data);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  // Undo/Redo
+  const undoStack = useRef<SiteData[]>([]);
+  const redoStack = useRef<SiteData[]>([]);
+  const [, forceRender] = useState(0);
+
+  const pushUndo = useCallback((current: SiteData) => {
+    undoStack.current = [...undoStack.current.slice(-MAX_UNDO + 1), current];
+    redoStack.current = [];
+    forceRender((n) => n + 1);
+  }, []);
+
+  const updateData = useCallback((updater: (prev: SiteData) => SiteData) => {
+    setData((prev) => {
+      pushUndo(prev);
+      return updater(prev);
+    });
+  }, [pushUndo]);
+
+  const undo = useCallback(() => {
+    if (!undoStack.current.length) return;
+    const prev = undoStack.current.at(-1)!;
+    undoStack.current = undoStack.current.slice(0, -1);
+    setData((curr) => { redoStack.current = [...redoStack.current, curr]; return prev; });
+    forceRender((n) => n + 1);
+  }, []);
+
+  const redo = useCallback(() => {
+    if (!redoStack.current.length) return;
+    const next = redoStack.current.at(-1)!;
+    redoStack.current = redoStack.current.slice(0, -1);
+    setData((curr) => { undoStack.current = [...undoStack.current, curr]; return next; });
+    forceRender((n) => n + 1);
+  }, []);
+
+  const save = () => { saveSiteData(data); setSaved(true); setTimeout(() => setSaved(false), 2000); };
+  const reset = () => { if (window.confirm("Reset all content to defaults?")) { pushUndo(data); resetSiteData(); setData(defaultSiteData); } };
+  const logout = () => { sessionStorage.removeItem("techTitans_admin"); navigate("/admin"); };
+
+  // ── Page helpers ──
+  const activePage = data.pages.find((p) => p.id === activePageId);
+  const selectedBlock = activePage?.blocks.find((b) => b.id === selectedBlockId);
+
+  const updatePage = (pageId: string, updater: (page: PageData) => PageData) => {
+    updateData((d) => ({ ...d, pages: d.pages.map((p) => p.id === pageId ? updater(p) : p) }));
   };
 
-  const reset = () => {
-    if (window.confirm("Reset all content to defaults? This cannot be undone.")) {
-      resetSiteData();
-      setData(defaultSiteData);
-    }
+  const addPage = () => {
+    const id = crypto.randomUUID();
+    const slug = `/page-${Date.now()}`;
+    const newPage: PageData = { id, title: "New Page", slug, showInNav: true, blocks: [
+      createBlock("hero"),
+    ] };
+    updateData((d) => ({ ...d, pages: [...d.pages, newPage] }));
+    setActivePageId(id);
   };
 
-  const logout = () => {
-    sessionStorage.removeItem("techTitans_admin");
-    navigate("/admin");
+  const deletePage = (pageId: string) => {
+    if (data.pages.length <= 1) return;
+    if (!window.confirm("Delete this page?")) return;
+    updateData((d) => ({ ...d, pages: d.pages.filter((p) => p.id !== pageId) }));
+    if (activePageId === pageId) setActivePageId(data.pages.find((p) => p.id !== pageId)!.id);
   };
 
-  const updateData = (partial: Partial<SiteData>) => {
-    setData((prev) => ({ ...prev, ...partial }));
+  const duplicatePage = (pageId: string) => {
+    const page = data.pages.find((p) => p.id === pageId);
+    if (!page) return;
+    const id = crypto.randomUUID();
+    const copy: PageData = {
+      ...structuredClone(page),
+      id, title: page.title + " (Copy)", slug: page.slug + "-copy",
+      blocks: page.blocks.map((b) => ({ ...b, id: crypto.randomUUID(), props: { ...b.props } })),
+    };
+    updateData((d) => ({ ...d, pages: [...d.pages, copy] }));
+    setActivePageId(id);
+  };
+
+  // ── Block helpers ──
+  const addBlock = (type: BlockType) => {
+    if (!activePage) return;
+    const block = createBlock(type);
+    updatePage(activePageId, (p) => ({ ...p, blocks: [...p.blocks, block] }));
+    setSelectedBlockId(block.id);
+    setShowPalette(false);
+  };
+
+  const updateBlock = (updated: Block) => {
+    updatePage(activePageId, (p) => ({
+      ...p, blocks: p.blocks.map((b) => b.id === updated.id ? updated : b),
+    }));
+  };
+
+  const deleteBlock = (blockId: string) => {
+    updatePage(activePageId, (p) => ({ ...p, blocks: p.blocks.filter((b) => b.id !== blockId) }));
+    if (selectedBlockId === blockId) setSelectedBlockId(null);
+  };
+
+  const moveBlock = (blockId: string, dir: -1 | 1) => {
+    updatePage(activePageId, (p) => {
+      const blocks = [...p.blocks];
+      const idx = blocks.findIndex((b) => b.id === blockId);
+      const target = idx + dir;
+      if (target < 0 || target >= blocks.length) return p;
+      [blocks[idx], blocks[target]] = [blocks[target], blocks[idx]];
+      return { ...p, blocks };
+    });
+  };
+
+  const duplicateBlock = (blockId: string) => {
+    updatePage(activePageId, (p) => {
+      const idx = p.blocks.findIndex((b) => b.id === blockId);
+      if (idx === -1) return p;
+      const copy = { ...p.blocks[idx], id: crypto.randomUUID(), props: { ...p.blocks[idx].props } };
+      const blocks = [...p.blocks];
+      blocks.splice(idx + 1, 0, copy);
+      return { ...p, blocks };
+    });
+  };
+
+  // ── I/O ──
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `techtitans-${new Date().toISOString().split("T")[0]}.json`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target?.result as string);
+        if (parsed.pages) {
+          pushUndo(data);
+          setData(parsed);
+          saveSiteData(parsed);
+          setImportStatus("success");
+        } else { setImportStatus("error"); }
+      } catch { setImportStatus("error"); }
+      setTimeout(() => setImportStatus("idle"), 3000);
+    };
+    reader.readAsText(file);
+    e.target.value = "";
   };
 
   return (
-    <PageLayout>
-      <section className="py-8 px-6">
-        <div className="max-w-5xl mx-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-            <div className="flex items-center gap-3">
-              <button onClick={reset} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
-                <RotateCcw size={16} /> Reset
-              </button>
-              <button onClick={save} className="flex items-center gap-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                {saved ? <><Check size={16} /> Saved</> : <><Save size={16} /> Save Changes</>}
-              </button>
-              <button onClick={logout} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-400 transition-colors">
-                <LogOut size={16} /> Logout
-              </button>
-            </div>
-          </div>
+    <div className="h-screen flex flex-col bg-gray-950 overflow-hidden text-white">
+      {/* ── Top Toolbar ── */}
+      <div className="h-11 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4 shrink-0">
+        <div className="flex items-center gap-1">
+          <span className="text-sm font-bold mr-3">Tech Titans Editor</span>
+          <button onClick={undo} disabled={!undoStack.current.length} className="p-1.5 text-gray-400 hover:text-white disabled:text-gray-700 transition-colors" title="Undo"><Undo2 size={15} /></button>
+          <button onClick={redo} disabled={!redoStack.current.length} className="p-1.5 text-gray-400 hover:text-white disabled:text-gray-700 transition-colors" title="Redo"><Redo2 size={15} /></button>
+        </div>
+        <div className="flex items-center gap-1 bg-gray-800 rounded px-2 py-0.5">
+          <button onClick={() => setZoom(Math.max(50, zoom - 15))} className="text-gray-400 hover:text-white text-xs px-1">-</button>
+          <span className="text-[11px] text-gray-300 w-8 text-center">{zoom}%</span>
+          <button onClick={() => setZoom(Math.min(200, zoom + 15))} className="text-gray-400 hover:text-white text-xs px-1">+</button>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button onClick={reset} className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-800"><RotateCcw size={13} /> Reset</button>
+          <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-800"><ExternalLink size={13} /> Preview</a>
+          <button onClick={save} className="flex items-center gap-1 text-[11px] bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">{saved ? <><Check size={13} /> Saved</> : <><Save size={13} /> Save</>}</button>
+          <button onClick={logout} className="p-1 text-gray-400 hover:text-red-400"><LogOut size={14} /></button>
+        </div>
+      </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 mb-8 bg-gray-800 p-1 rounded-lg">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-colors flex-1 justify-center ${
-                  activeTab === tab.id
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                <tab.icon size={16} />
-                <span className="hidden sm:inline">{tab.label}</span>
+      <div className="flex flex-1 overflow-hidden">
+        {/* ── Left Sidebar ── */}
+        <div className="w-56 bg-gray-900 border-r border-gray-800 flex flex-col shrink-0">
+          <div className="flex border-b border-gray-800 text-[11px]">
+            {(["pages", "blocks", "penpot", "io"] as const).map((t) => (
+              <button key={t} onClick={() => setLeftTab(t)}
+                className={`flex-1 py-2 font-medium capitalize transition-colors ${leftTab === t ? "text-blue-400 border-b-2 border-blue-400" : "text-gray-500 hover:text-gray-300"}`}>
+                {t === "io" ? "I/O" : t === "penpot" ? "PenPot" : t}
               </button>
             ))}
           </div>
 
-          {/* Tab Content */}
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {activeTab === "team" && <TeamTab data={data} updateData={updateData} />}
-            {activeTab === "content" && <ContentTab data={data} updateData={updateData} />}
-            {activeTab === "stats" && <StatsTab data={data} updateData={updateData} />}
-            {activeTab === "penpot" && <PenPotTab data={data} updateData={updateData} />}
-          </motion.div>
+          <div className="flex-1 overflow-y-auto">
+            {/* Pages tab */}
+            {leftTab === "pages" && (
+              <div className="py-2">
+                {data.pages.map((page) => (
+                  <div key={page.id}
+                    className={`group flex items-center gap-1 px-2 py-1.5 text-[12px] cursor-pointer transition-colors ${page.id === activePageId ? "bg-blue-500/15 text-blue-400" : "text-gray-400 hover:bg-gray-800"}`}
+                    onClick={() => { setActivePageId(page.id); setSelectedBlockId(null); }}>
+                    <FileText size={13} className="shrink-0" />
+                    <span className="flex-1 truncate">{page.title}</span>
+                    {!page.showInNav && <EyeOff size={11} className="text-gray-600" />}
+                    <button onClick={(e) => { e.stopPropagation(); duplicatePage(page.id); }} className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-white"><Copy size={11} /></button>
+                    <button onClick={(e) => { e.stopPropagation(); deletePage(page.id); }} className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400"><Trash2 size={11} /></button>
+                  </div>
+                ))}
+                <button onClick={addPage} className="flex items-center gap-1 px-2 py-1.5 text-[11px] text-blue-400 hover:text-blue-300 w-full"><Plus size={13} /> Add Page</button>
+
+                {/* Page settings */}
+                {activePage && (
+                  <div className="border-t border-gray-800 mt-2 pt-2 px-2 space-y-2">
+                    <p className="text-[10px] text-gray-500 uppercase font-semibold">Page Settings</p>
+                    <div>
+                      <label className="text-[10px] text-gray-500">Title</label>
+                      <input value={activePage.title} onChange={(e) => updatePage(activePageId, (p) => ({ ...p, title: e.target.value }))}
+                        className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1 text-[11px] text-white focus:outline-none focus:border-blue-500" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-500">Slug</label>
+                      <input value={activePage.slug} onChange={(e) => updatePage(activePageId, (p) => ({ ...p, slug: e.target.value }))}
+                        className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1 text-[11px] text-white focus:outline-none focus:border-blue-500" />
+                    </div>
+                    <label className="flex items-center gap-2 text-[11px] text-gray-400 cursor-pointer">
+                      <input type="checkbox" checked={activePage.showInNav} onChange={(e) => updatePage(activePageId, (p) => ({ ...p, showInNav: e.target.checked }))}
+                        className="rounded" />
+                      Show in navigation
+                    </label>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Blocks tab */}
+            {leftTab === "blocks" && activePage && (
+              <div className="py-2">
+                <p className="px-2 text-[10px] text-gray-500 uppercase font-semibold mb-1">Blocks in "{activePage.title}"</p>
+                {activePage.blocks.map((block, i) => (
+                  <div key={block.id}
+                    className={`group flex items-center gap-1 px-2 py-1 text-[11px] cursor-pointer transition-colors ${block.id === selectedBlockId ? "bg-blue-500/15 text-blue-400" : "text-gray-400 hover:bg-gray-800"}`}
+                    onClick={() => setSelectedBlockId(block.id)}>
+                    <GripVertical size={11} className="text-gray-600 shrink-0" />
+                    <span className="flex-1 truncate">{block.type}{block.props.title ? `: ${block.props.title}` : ""}</span>
+                    <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, -1); }} disabled={i === 0} className="opacity-0 group-hover:opacity-100 disabled:text-gray-700 text-gray-500 hover:text-white"><ChevronUp size={11} /></button>
+                    <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, 1); }} disabled={i === activePage.blocks.length - 1} className="opacity-0 group-hover:opacity-100 disabled:text-gray-700 text-gray-500 hover:text-white"><ChevronDown size={11} /></button>
+                    <button onClick={(e) => { e.stopPropagation(); deleteBlock(block.id); }} className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400"><Trash2 size={11} /></button>
+                  </div>
+                ))}
+                <button onClick={() => setShowPalette(true)} className="flex items-center gap-1 px-2 py-1.5 text-[11px] text-blue-400 hover:text-blue-300 w-full"><Plus size={13} /> Add Block</button>
+              </div>
+            )}
+
+            {/* PenPot tab */}
+            {leftTab === "penpot" && (
+              <div className="p-3 space-y-3">
+                <p className="text-[11px] text-gray-400">Embed a PenPot design viewer.</p>
+                <input value={data.penpotEmbedUrl} onChange={(e) => updateData((d) => ({ ...d, penpotEmbedUrl: e.target.value }))}
+                  placeholder="https://design.penpot.app/#/view/..."
+                  className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-blue-500" />
+              </div>
+            )}
+
+            {/* I/O tab */}
+            {leftTab === "io" && (
+              <div className="p-3 space-y-3">
+                <button onClick={handleExport} className="w-full flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-[11px] py-2 rounded">
+                  <Download size={13} /> Export JSON
+                </button>
+                <label className="w-full flex items-center justify-center gap-1.5 bg-gray-800 hover:bg-gray-700 text-white text-[11px] py-2 rounded cursor-pointer border border-gray-700">
+                  <Upload size={13} /> Import JSON
+                  <input type="file" accept=".json" onChange={handleImport} className="hidden" />
+                </label>
+                {importStatus === "success" && <p className="text-green-400 text-[11px] flex items-center gap-1"><Check size={12} /> Imported</p>}
+                {importStatus === "error" && <p className="text-red-400 text-[11px] flex items-center gap-1"><AlertCircle size={12} /> Invalid file</p>}
+              </div>
+            )}
+          </div>
         </div>
-      </section>
-    </PageLayout>
+
+        {/* ── Center Canvas ── */}
+        {leftTab === "penpot" && data.penpotEmbedUrl ? (
+          <div className="flex-1 bg-gray-950">
+            <iframe src={data.penpotEmbedUrl} title="PenPot" className="w-full h-full border-0" sandbox="allow-scripts allow-same-origin allow-popups" />
+          </div>
+        ) : (
+          <div className="flex-1 bg-gray-950 overflow-auto">
+            <div className="p-6 flex justify-center">
+              <div className="w-full max-w-[900px] origin-top" style={{ transform: `scale(${zoom / 100})` }}>
+                {activePage ? (
+                  <div className="bg-background rounded-lg shadow-2xl border border-gray-800 overflow-hidden">
+                    {activePage.blocks.map((block) => (
+                      <div key={block.id} className="relative group">
+                        <BlockRenderer
+                          block={block}
+                          isAdmin
+                          isSelected={block.id === selectedBlockId}
+                          onClick={() => setSelectedBlockId(block.id)}
+                        />
+                        {/* Hover controls */}
+                        <div className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 flex gap-0.5 z-10 transition-opacity">
+                          <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, -1); }} className="bg-gray-900/90 text-gray-400 hover:text-white p-0.5 rounded"><ChevronUp size={12} /></button>
+                          <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, 1); }} className="bg-gray-900/90 text-gray-400 hover:text-white p-0.5 rounded"><ChevronDown size={12} /></button>
+                          <button onClick={(e) => { e.stopPropagation(); duplicateBlock(block.id); }} className="bg-gray-900/90 text-gray-400 hover:text-white p-0.5 rounded"><Copy size={12} /></button>
+                          <button onClick={(e) => { e.stopPropagation(); deleteBlock(block.id); }} className="bg-gray-900/90 text-gray-400 hover:text-red-400 p-0.5 rounded"><Trash2 size={12} /></button>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Add block button at bottom */}
+                    <button onClick={() => setShowPalette(true)}
+                      className="w-full py-4 border-t border-dashed border-gray-700 text-gray-600 hover:text-blue-400 hover:border-blue-500 transition-colors flex items-center justify-center gap-2 text-sm">
+                      <Plus size={16} /> Add Block
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-600 py-20">No page selected</div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Right Sidebar (Properties) ── */}
+        <div className="w-72 bg-gray-900 border-l border-gray-800 flex flex-col shrink-0 overflow-y-auto">
+          <div className="p-2.5 border-b border-gray-800">
+            <h3 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Properties</h3>
+          </div>
+          <div className="p-2.5 flex-1">
+            {selectedBlock ? (
+              <BlockPropertyEditor block={selectedBlock} onChange={updateBlock} />
+            ) : (
+              <div className="text-center text-gray-600 text-[12px] mt-8">Click a block to edit its properties</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Block Palette Modal ── */}
+      {showPalette && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center" onClick={() => setShowPalette(false)}>
+          <div className="bg-gray-900 border border-gray-700 rounded-lg w-[500px] max-h-[70vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-gray-800">
+              <h2 className="text-sm font-bold text-white">Add Block</h2>
+              <button onClick={() => setShowPalette(false)} className="text-gray-400 hover:text-white"><X size={16} /></button>
+            </div>
+            <div className="grid grid-cols-3 gap-2 p-4">
+              {BLOCK_PALETTE.map((bp) => (
+                <button key={bp.type} onClick={() => addBlock(bp.type)}
+                  className="flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-700 hover:border-blue-500 hover:bg-blue-500/10 transition-all text-gray-400 hover:text-blue-400">
+                  <bp.icon size={24} />
+                  <span className="text-[11px] font-medium">{bp.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
-
-/* ─── Team Members Tab ─── */
-function TeamTab({ data, updateData }: { data: SiteData; updateData: (p: Partial<SiteData>) => void }) {
-  const addMember = () => {
-    const newMember: TeamMember = {
-      id: Date.now().toString(),
-      name: "",
-      role: "Team Member",
-    };
-    updateData({ teamMembers: [...data.teamMembers, newMember] });
-  };
-
-  const removeMember = (id: string) => {
-    updateData({ teamMembers: data.teamMembers.filter((m) => m.id !== id) });
-  };
-
-  const updateMember = (id: string, field: keyof TeamMember, value: string) => {
-    updateData({
-      teamMembers: data.teamMembers.map((m) =>
-        m.id === id ? { ...m, [field]: value } : m
-      ),
-    });
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Team Members ({data.teamMembers.length})</h2>
-        <button onClick={addMember} className="flex items-center gap-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition-colors">
-          <Plus size={16} /> Add Member
-        </button>
-      </div>
-      {data.teamMembers.map((member) => (
-        <div key={member.id} className="flex gap-3 items-center bg-gray-800 border border-gray-700 rounded-lg p-4">
-          <div className="flex-1 grid grid-cols-2 gap-3">
-            <input
-              value={member.name}
-              onChange={(e) => updateMember(member.id, "name", e.target.value)}
-              placeholder="Name"
-              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
-            />
-            <input
-              value={member.role}
-              onChange={(e) => updateMember(member.id, "role", e.target.value)}
-              placeholder="Role"
-              className="bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
-            />
-          </div>
-          <button onClick={() => removeMember(member.id)} className="text-gray-500 hover:text-red-400 transition-colors">
-            <Trash2 size={18} />
-          </button>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ─── Page Content Tab ─── */
-function ContentTab({ data, updateData }: { data: SiteData; updateData: (p: Partial<SiteData>) => void }) {
-  const pc = data.pageContent;
-
-  const updateContent = (section: string, field: string, value: string) => {
-    updateData({
-      pageContent: {
-        ...pc,
-        [section]: { ...(pc as Record<string, Record<string, unknown>>)[section], [field]: value },
-      },
-    });
-  };
-
-  const updateStep = (index: number, field: string, value: string) => {
-    const steps = [...pc.innovation.steps];
-    steps[index] = { ...steps[index], [field]: value };
-    updateData({
-      pageContent: { ...pc, innovation: { ...pc.innovation, steps } },
-    });
-  };
-
-  const updateFeature = (index: number, field: string, value: string) => {
-    const features = [...pc.robot.features];
-    features[index] = { ...features[index], [field]: value };
-    updateData({
-      pageContent: { ...pc, robot: { ...pc.robot, features } },
-    });
-  };
-
-  const updateCoreValue = (index: number, field: string, value: string) => {
-    const values = [...pc.coreValues];
-    values[index] = { ...values[index], [field]: value };
-    updateData({ pageContent: { ...pc, coreValues: values } });
-  };
-
-  return (
-    <div className="space-y-8">
-      {/* Home */}
-      <Section title="Home Page">
-        <Field label="Tagline" value={pc.home.tagline} onChange={(v) => updateContent("home", "tagline", v)} />
-        <Field label="Slogan" value={pc.home.slogan} onChange={(v) => updateContent("home", "slogan", v)} />
-      </Section>
-
-      {/* About */}
-      <Section title="About Page">
-        <Field label="Paragraph 1" value={pc.about.paragraph1} onChange={(v) => updateContent("about", "paragraph1", v)} multiline />
-        <Field label="Paragraph 2" value={pc.about.paragraph2} onChange={(v) => updateContent("about", "paragraph2", v)} multiline />
-      </Section>
-
-      {/* Innovation */}
-      <Section title="Innovation Project">
-        <Field label="Challenge Description" value={pc.innovation.challengeDescription} onChange={(v) => updateData({ pageContent: { ...pc, innovation: { ...pc.innovation, challengeDescription: v } } })} multiline />
-        {pc.innovation.steps.map((step, i) => (
-          <div key={i} className="border border-gray-700 rounded-lg p-4 space-y-3">
-            <p className="text-xs text-blue-400 font-medium uppercase">Step {i + 1}</p>
-            <Field label="Title" value={step.title} onChange={(v) => updateStep(i, "title", v)} />
-            <Field label="Description" value={step.description} onChange={(v) => updateStep(i, "description", v)} multiline />
-          </div>
-        ))}
-      </Section>
-
-      {/* Robot */}
-      <Section title="Robot Games">
-        {pc.robot.features.map((feature, i) => (
-          <div key={i} className="border border-gray-700 rounded-lg p-4 space-y-3">
-            <Field label="Title" value={feature.title} onChange={(v) => updateFeature(i, "title", v)} />
-            <Field label="Description" value={feature.description} onChange={(v) => updateFeature(i, "description", v)} multiline />
-          </div>
-        ))}
-      </Section>
-
-      {/* Core Values */}
-      <Section title="Core Values">
-        {pc.coreValues.map((cv, i) => (
-          <div key={i} className="border border-gray-700 rounded-lg p-4 space-y-3">
-            <p className="text-xs text-blue-400 font-medium uppercase">{cv.title}</p>
-            <Field label="Description" value={cv.description} onChange={(v) => updateCoreValue(i, "description", v)} multiline />
-            <Field label="How We Live This" value={cv.howWeDoIt} onChange={(v) => updateCoreValue(i, "howWeDoIt", v)} multiline />
-          </div>
-        ))}
-      </Section>
-    </div>
-  );
-}
-
-/* ─── Stats Tab ─── */
-function StatsTab({ data, updateData }: { data: SiteData; updateData: (p: Partial<SiteData>) => void }) {
-  const updateStat = (field: string, value: string) => {
-    updateData({ stats: { ...data.stats, [field]: value } });
-  };
-  const updateScore = (field: string, value: string) => {
-    updateData({ robotScores: { ...data.robotScores, [field]: value } });
-  };
-
-  return (
-    <div className="space-y-8">
-      <Section title="About Page Stats">
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Team Members" value={data.stats.teamMembers} onChange={(v) => updateStat("teamMembers", v)} />
-          <Field label="Seasons" value={data.stats.seasons} onChange={(v) => updateStat("seasons", v)} />
-          <Field label="Robots Built" value={data.stats.robotsBuilt} onChange={(v) => updateStat("robotsBuilt", v)} />
-          <Field label="Competitions" value={data.stats.competitions} onChange={(v) => updateStat("competitions", v)} />
-        </div>
-      </Section>
-
-      <Section title="Robot Games Scores">
-        <div className="grid grid-cols-3 gap-4">
-          <Field label="Best Score" value={data.robotScores.bestScore} onChange={(v) => updateScore("bestScore", v)} />
-          <Field label="Avg Score" value={data.robotScores.avgScore} onChange={(v) => updateScore("avgScore", v)} />
-          <Field label="Missions" value={data.robotScores.missions} onChange={(v) => updateScore("missions", v)} />
-        </div>
-      </Section>
-    </div>
-  );
-}
-
-/* ─── PenPot Tab ─── */
-function PenPotTab({ data, updateData }: { data: SiteData; updateData: (p: Partial<SiteData>) => void }) {
-  return (
-    <div className="space-y-6">
-      <Section title="PenPot Design Integration">
-        <p className="text-gray-400 text-sm mb-4">
-          Paste a PenPot share/embed URL below to view your team's designs directly in the admin panel.
-          To get a share link: open your project in{" "}
-          <a href="https://design.penpot.app" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-            PenPot
-          </a>
-          , click Share, and copy the view link.
-        </p>
-        <Field
-          label="PenPot Embed URL"
-          value={data.penpotEmbedUrl}
-          onChange={(v) => updateData({ penpotEmbedUrl: v })}
-          placeholder="https://design.penpot.app/#/view/..."
-        />
-      </Section>
-
-      {data.penpotEmbedUrl ? (
-        <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-          <div className="px-4 py-2 border-b border-gray-700 flex items-center gap-2">
-            <Palette size={16} className="text-blue-400" />
-            <span className="text-sm text-gray-300">PenPot Viewer</span>
-          </div>
-          <iframe
-            src={data.penpotEmbedUrl}
-            title="PenPot Design"
-            className="w-full h-[600px] border-0"
-            sandbox="allow-scripts allow-same-origin allow-popups"
-          />
-        </div>
-      ) : (
-        <div className="bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg h-64 flex items-center justify-center">
-          <div className="text-center">
-            <Palette className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-500">Paste a PenPot URL above to preview designs here</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ─── Shared Components ─── */
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
-      <div className="space-y-4">{children}</div>
-    </div>
-  );
-}
-
-function Field({
-  label, value, onChange, multiline, placeholder,
-}: {
-  label: string; value: string; onChange: (v: string) => void; multiline?: boolean; placeholder?: string;
-}) {
-  const cls = "w-full bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm";
-  return (
-    <div>
-      <label className="block text-xs font-medium text-gray-400 mb-1">{label}</label>
-      {multiline ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={3} className={cls + " resize-y"} placeholder={placeholder} />
-      ) : (
-        <input value={value} onChange={(e) => onChange(e.target.value)} className={cls} placeholder={placeholder} />
-      )}
-    </div>
-  );
-}
 
 export default AdminDashboard;
