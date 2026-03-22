@@ -1,4 +1,5 @@
 const STORAGE_KEY = "techTitans_siteData_v2";
+const PUBLISHED_KEY = "techTitans_publishedData_v2";
 
 // ── Block Types ──
 
@@ -194,6 +195,18 @@ export const defaultSiteData: SiteData = {
   ],
   penpotEmbedUrl: "",
 };
+
+export function getPublishedData(): SiteData | null {
+  try {
+    const stored = localStorage.getItem(PUBLISHED_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  return null;
+}
+
+export function publishSiteData(data: SiteData): void {
+  localStorage.setItem(PUBLISHED_KEY, JSON.stringify(data));
+}
 
 export function getSiteData(): SiteData {
   try {

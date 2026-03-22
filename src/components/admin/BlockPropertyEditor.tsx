@@ -1,4 +1,5 @@
-import { Plus, Trash2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Trash2, Image as ImageIcon, X, Link } from "lucide-react";
 import type { Block } from "@/lib/siteData";
 
 interface Props {
@@ -42,7 +43,7 @@ const BlockPropertyEditor = ({ block, onChange }: Props) => {
     case "image":
       return (
         <Fields title="Image">
-          <Input label="Image URL" value={p.src as string} onChange={(v) => set("src", v)} />
+          <ImageUpload src={p.src as string} onSrc={(v) => set("src", v)} />
           <Input label="Alt Text" value={p.alt as string} onChange={(v) => set("alt", v)} />
           <Input label="Caption" value={p.caption as string} onChange={(v) => set("caption", v)} />
           <Input label="Height (px)" value={p.height as string} onChange={(v) => set("height", v)} />
@@ -141,7 +142,7 @@ const BlockPropertyEditor = ({ block, onChange }: Props) => {
     }
 
     case "team": {
-      const members = (p.members as { id: string; name: string; role: string }[]) || [];
+      const members = (p.members as { id: string; name: string; role: string; photo?: string }[]) || [];
       return (
         <Fields title="Team Members">
           <ListEditor
@@ -150,9 +151,13 @@ const BlockPropertyEditor = ({ block, onChange }: Props) => {
               <div className="space-y-1.5">
                 <Input label="Name" value={m.name} onChange={(v) => { const ms = [...members]; ms[i] = { ...ms[i], name: v }; set("members", ms); }} />
                 <Input label="Role" value={m.role} onChange={(v) => { const ms = [...members]; ms[i] = { ...ms[i], role: v }; set("members", ms); }} />
+                <ImageUpload
+                  src={m.photo || ""}
+                  onSrc={(v) => { const ms = [...members]; ms[i] = { ...ms[i], photo: v }; set("members", ms); }}
+                />
               </div>
             )}
-            onAdd={() => set("members", [...members, { id: crypto.randomUUID(), name: "", role: "Team Member" }])}
+            onAdd={() => set("members", [...members, { id: crypto.randomUUID(), name: "", role: "Team Member", photo: "" }])}
             onRemove={(i) => set("members", members.filter((_, j) => j !== i))}
           />
         </Fields>
@@ -203,6 +208,84 @@ const BlockPropertyEditor = ({ block, onChange }: Props) => {
       return <div className="p-3 text-gray-500 text-sm">No properties for this block type.</div>;
   }
 };
+
+// ── Image Upload ──
+
+function ImageUpload({ src, onSrc }: { src: string; onSrc: (v: string) => void }) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [urlMode, setUrlMode] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => onSrc(e.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const isDataUrl = src?.startsWith("data:");
+  const displayUrl = isDataUrl ? "" : (src || "");
+
+  return (
+    <div>
+      <label className="block text-[11px] font-medium text-gray-400 mb-1">Image</label>
+
+      {src && (
+        <div className="relative mb-2 group">
+          <img src={src} alt="preview" className="w-full h-20 object-cover rounded border border-gray-700" />
+          <button
+            onClick={() => onSrc("")}
+            className="absolute top-1 right-1 bg-gray-900/90 text-red-400 rounded p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <X size={12} />
+          </button>
+        </div>
+      )}
+
+      <div
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setIsDragging(false);
+          const file = e.dataTransfer.files[0];
+          if (file) handleFile(file);
+        }}
+        onClick={() => fileInputRef.current?.click()}
+        className={`border-2 border-dashed rounded p-3 text-center cursor-pointer transition-colors mb-2 ${
+          isDragging ? "border-blue-400 bg-blue-500/10 text-blue-400" : "border-gray-700 hover:border-gray-500 text-gray-500"
+        }`}
+      >
+        <ImageIcon size={16} className="mx-auto mb-1" />
+        <p className="text-[10px]">{isDragging ? "Drop to upload" : "Drop image or click to upload"}</p>
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+        className="hidden"
+      />
+
+      <button
+        onClick={() => setUrlMode((v) => !v)}
+        className="flex items-center gap-1 text-[10px] text-gray-500 hover:text-gray-300 transition-colors mb-1"
+      >
+        <Link size={11} /> {urlMode ? "Hide URL input" : "Or paste a URL"}
+      </button>
+
+      {urlMode && (
+        <input
+          value={displayUrl}
+          onChange={(e) => onSrc(e.target.value)}
+          placeholder="https://example.com/image.jpg"
+          className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-blue-500"
+        />
+      )}
+    </div>
+  );
+}
 
 // ── Shared UI ──
 

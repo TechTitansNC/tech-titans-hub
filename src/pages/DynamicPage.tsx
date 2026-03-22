@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import { getSiteData } from "@/lib/siteData";
+import { getPublishedData, getSiteData } from "@/lib/siteData";
 import PageLayout from "@/components/PageLayout";
 import BlockRenderer from "@/components/BlockRenderer";
 
 const DynamicPage = () => {
   const { slug } = useParams();
-  const data = getSiteData();
+  const data = getPublishedData() ?? getSiteData();
 
   const resolvedSlug = slug ? `/${slug}` : "/";
   const page = data.pages.find((p) => p.slug === resolvedSlug);

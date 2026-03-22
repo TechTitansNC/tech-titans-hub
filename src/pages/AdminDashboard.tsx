@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  getSiteData, saveSiteData, resetSiteData, defaultSiteData,
+  getSiteData, saveSiteData, resetSiteData, defaultSiteData, publishSiteData, getPublishedData,
   createBlock, type SiteData, type PageData, type Block, type BlockType,
 } from "@/lib/siteData";
 import BlockRenderer from "@/components/BlockRenderer";
@@ -9,7 +9,7 @@ import BlockPropertyEditor from "@/components/admin/BlockPropertyEditor";
 import {
   Save, RotateCcw, LogOut, Check, Undo2, Redo2, ExternalLink,
   Plus, Trash2, ChevronUp, ChevronDown, Copy, GripVertical, Eye, EyeOff,
-  Download, Upload, Palette, FileText, Layout,
+  Download, Upload, Palette, FileText, Layout, Globe,
   Type, Image, MousePointer, Minus, Square, Columns, Quote, Flag, BarChart3,
   Users, Heart, Zap, AlertCircle, X,
 } from "lucide-react";
@@ -44,6 +44,9 @@ const AdminDashboard = () => {
   const [leftTab, setLeftTab] = useState<"pages" | "blocks" | "penpot" | "io">("pages");
   const [showPalette, setShowPalette] = useState(false);
   const [importStatus, setImportStatus] = useState<"idle" | "success" | "error">("idle");
+  const [publishStatus, setPublishStatus] = useState<"idle" | "published">("idle");
+  const [draggingBlockId, setDraggingBlockId] = useState<string | null>(null);
+  const [dragOverBlockId, setDragOverBlockId] = useState<string | null>(null);
 
   // Undo/Redo
   const undoStack = useRef<SiteData[]>([]);
@@ -82,6 +85,12 @@ const AdminDashboard = () => {
   const save = () => { saveSiteData(data); setSaved(true); setTimeout(() => setSaved(false), 2000); };
   const reset = () => { if (window.confirm("Reset all content to defaults?")) { pushUndo(data); resetSiteData(); setData(defaultSiteData); } };
   const logout = () => { sessionStorage.removeItem("techTitans_admin"); navigate("/admin"); };
+  const publish = () => { saveSiteData(data); publishSiteData(data); setPublishStatus("published"); setTimeout(() => setPublishStatus("idle"), 3000); };
+
+  const isLive = (() => {
+    const pub = getPublishedData();
+    return pub ? JSON.stringify(data) === JSON.stringify(pub) : false;
+  })();
 
   // ── Page helpers ──
   const activePage = data.pages.find((p) => p.id === activePageId);
@@ -210,6 +219,9 @@ const AdminDashboard = () => {
           <button onClick={reset} className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-800"><RotateCcw size={13} /> Reset</button>
           <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-800"><ExternalLink size={13} /> Preview</a>
           <button onClick={save} className="flex items-center gap-1 text-[11px] bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">{saved ? <><Check size={13} /> Saved</> : <><Save size={13} /> Save</>}</button>
+          <button onClick={publish} className={`flex items-center gap-1 text-[11px] px-3 py-1 rounded font-medium transition-colors ${isLive ? "bg-green-700 text-green-200 cursor-default" : "bg-green-600 hover:bg-green-500 text-white"}`}>
+            {publishStatus === "published" || isLive ? <><Check size={13} /> Published</> : <><Globe size={13} /> Publish</>}
+          </button>
           <button onClick={logout} className="p-1 text-gray-400 hover:text-red-400"><LogOut size={14} /></button>
         </div>
       </div>
@@ -324,8 +336,29 @@ const AdminDashboard = () => {
               <div className="w-full max-w-[900px] origin-top" style={{ transform: `scale(${zoom / 100})` }}>
                 {activePage ? (
                   <div className="bg-background rounded-lg shadow-2xl border border-gray-800 overflow-hidden">
-                    {activePage.blocks.map((block) => (
-                      <div key={block.id} className="relative group">
+                    {activePage.blocks.map((block, i) => (
+                      <div
+                        key={block.id}
+                        draggable
+                        onDragStart={(e) => { e.stopPropagation(); setDraggingBlockId(block.id); }}
+                        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (block.id !== draggingBlockId) setDragOverBlockId(block.id); }}
+                        onDragLeave={() => setDragOverBlockId(null)}
+                        onDrop={(e) => {
+                          e.preventDefault(); e.stopPropagation();
+                          if (draggingBlockId && draggingBlockId !== block.id) {
+                            updatePage(activePageId, (p) => {
+                              const blocks = [...p.blocks];
+                              const fromIdx = blocks.findIndex((b) => b.id === draggingBlockId);
+                              const toIdx = blocks.findIndex((b) => b.id === block.id);
+                              blocks.splice(toIdx, 0, blocks.splice(fromIdx, 1)[0]);
+                              return { ...p, blocks };
+                            });
+                          }
+                          setDraggingBlockId(null); setDragOverBlockId(null);
+                        }}
+                        onDragEnd={() => { setDraggingBlockId(null); setDragOverBlockId(null); }}
+                        className={`relative group transition-opacity ${draggingBlockId === block.id ? "opacity-40" : "opacity-100"} ${dragOverBlockId === block.id ? "ring-2 ring-blue-400 ring-inset" : ""}`}
+                      >
                         <BlockRenderer
                           block={block}
                           isAdmin
@@ -334,8 +367,9 @@ const AdminDashboard = () => {
                         />
                         {/* Hover controls */}
                         <div className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 flex gap-0.5 z-10 transition-opacity">
-                          <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, -1); }} className="bg-gray-900/90 text-gray-400 hover:text-white p-0.5 rounded"><ChevronUp size={12} /></button>
-                          <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, 1); }} className="bg-gray-900/90 text-gray-400 hover:text-white p-0.5 rounded"><ChevronDown size={12} /></button>
+                          <div className="bg-gray-900/90 text-gray-400 p-0.5 rounded cursor-grab active:cursor-grabbing" title="Drag to reorder"><GripVertical size={12} /></div>
+                          <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, -1); }} disabled={i === 0} className="bg-gray-900/90 text-gray-400 hover:text-white disabled:text-gray-700 p-0.5 rounded"><ChevronUp size={12} /></button>
+                          <button onClick={(e) => { e.stopPropagation(); moveBlock(block.id, 1); }} disabled={i === activePage.blocks.length - 1} className="bg-gray-900/90 text-gray-400 hover:text-white disabled:text-gray-700 p-0.5 rounded"><ChevronDown size={12} /></button>
                           <button onClick={(e) => { e.stopPropagation(); duplicateBlock(block.id); }} className="bg-gray-900/90 text-gray-400 hover:text-white p-0.5 rounded"><Copy size={12} /></button>
                           <button onClick={(e) => { e.stopPropagation(); deleteBlock(block.id); }} className="bg-gray-900/90 text-gray-400 hover:text-red-400 p-0.5 rounded"><Trash2 size={12} /></button>
                         </div>

@@ -166,15 +166,19 @@ const BlockRenderer = ({ block, isAdmin, isSelected, onClick }: BlockRendererPro
     }
 
     case "team": {
-      const members = p.members as { id: string; name: string; role: string }[];
+      const members = p.members as { id: string; name: string; role: string; photo?: string }[];
       return wrapper(
         <div className="px-6 py-8 max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {members.map((m, i) => (
               <motion.div key={m.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                 className="border-2 border-gray-700 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
-                <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="w-10 h-10 text-blue-500" />
+                <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden bg-gray-800 flex items-center justify-center">
+                  {m.photo ? (
+                    <img src={m.photo} alt={m.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="w-10 h-10 text-blue-500" />
+                  )}
                 </div>
                 <h3 className="text-lg font-bold text-white">{m.name}</h3>
                 <p className="text-sm text-blue-500 font-medium">{m.role}</p>
