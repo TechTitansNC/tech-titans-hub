@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Lock, AlertCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 
-const ADMIN_PASSWORD = "TechTitans2026";
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 const AdminLogin = () => {
   const [password, setPassword] = useState("");

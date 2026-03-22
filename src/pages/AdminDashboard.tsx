@@ -4,12 +4,13 @@ import {
   getSiteData, saveSiteData, resetSiteData, defaultSiteData, publishSiteData, getPublishedData,
   createBlock, type SiteData, type PageData, type Block, type BlockType,
 } from "@/lib/siteData";
+import { getGitHubConfig, publishToGitHub } from "@/lib/githubSync";
 import BlockRenderer from "@/components/BlockRenderer";
 import BlockPropertyEditor from "@/components/admin/BlockPropertyEditor";
 import {
   Save, RotateCcw, LogOut, Check, Undo2, Redo2, ExternalLink,
-  Plus, Trash2, ChevronUp, ChevronDown, Copy, GripVertical, Eye, EyeOff,
-  Download, Upload, Palette, FileText, Layout, Globe,
+  Plus, Trash2, ChevronUp, ChevronDown, Copy, GripVertical, EyeOff, Globe,
+  FileText, Layout,
   Type, Image, MousePointer, Minus, Square, Columns, Quote, Flag, BarChart3,
   Users, Heart, Zap, AlertCircle, X,
 } from "lucide-react";
@@ -41,10 +42,10 @@ const AdminDashboard = () => {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [zoom, setZoom] = useState(85);
-  const [leftTab, setLeftTab] = useState<"pages" | "blocks" | "penpot" | "io">("pages");
+  const [leftTab, setLeftTab] = useState<"pages" | "blocks" | "penpot">("pages");
   const [showPalette, setShowPalette] = useState(false);
-  const [importStatus, setImportStatus] = useState<"idle" | "success" | "error">("idle");
-  const [publishStatus, setPublishStatus] = useState<"idle" | "published">("idle");
+  const [publishStatus, setPublishStatus] = useState<"idle" | "publishing" | "published" | "error">("idle");
+  const [publishError, setPublishError] = useState("");
   const [draggingBlockId, setDraggingBlockId] = useState<string | null>(null);
   const [dragOverBlockId, setDragOverBlockId] = useState<string | null>(null);
 
@@ -85,7 +86,20 @@ const AdminDashboard = () => {
   const save = () => { saveSiteData(data); setSaved(true); setTimeout(() => setSaved(false), 2000); };
   const reset = () => { if (window.confirm("Reset all content to defaults?")) { pushUndo(data); resetSiteData(); setData(defaultSiteData); } };
   const logout = () => { sessionStorage.removeItem("techTitans_admin"); navigate("/admin"); };
-  const publish = () => { saveSiteData(data); publishSiteData(data); setPublishStatus("published"); setTimeout(() => setPublishStatus("idle"), 3000); };
+  const publish = async () => {
+    saveSiteData(data);
+    publishSiteData(data);
+    setPublishError("");
+    setPublishStatus("publishing");
+    try {
+      await publishToGitHub(data, getGitHubConfig());
+      setPublishStatus("published");
+    } catch (e) {
+      setPublishError((e as Error).message);
+      setPublishStatus("error");
+    }
+    setTimeout(() => setPublishStatus("idle"), 5000);
+  };
 
   const isLive = (() => {
     const pub = getPublishedData();
@@ -172,34 +186,6 @@ const AdminDashboard = () => {
     });
   };
 
-  // ── I/O ──
-  const handleExport = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `techtitans-${new Date().toISOString().split("T")[0]}.json`; a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const parsed = JSON.parse(ev.target?.result as string);
-        if (parsed.pages) {
-          pushUndo(data);
-          setData(parsed);
-          saveSiteData(parsed);
-          setImportStatus("success");
-        } else { setImportStatus("error"); }
-      } catch { setImportStatus("error"); }
-      setTimeout(() => setImportStatus("idle"), 3000);
-    };
-    reader.readAsText(file);
-    e.target.value = "";
-  };
 
   return (
     <div className="h-screen flex flex-col bg-gray-950 overflow-hidden text-white">
@@ -219,8 +205,20 @@ const AdminDashboard = () => {
           <button onClick={reset} className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-800"><RotateCcw size={13} /> Reset</button>
           <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-800"><ExternalLink size={13} /> Preview</a>
           <button onClick={save} className="flex items-center gap-1 text-[11px] bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">{saved ? <><Check size={13} /> Saved</> : <><Save size={13} /> Save</>}</button>
-          <button onClick={publish} className={`flex items-center gap-1 text-[11px] px-3 py-1 rounded font-medium transition-colors ${isLive ? "bg-green-700 text-green-200 cursor-default" : "bg-green-600 hover:bg-green-500 text-white"}`}>
-            {publishStatus === "published" || isLive ? <><Check size={13} /> Published</> : <><Globe size={13} /> Publish</>}
+          <button
+            onClick={publish}
+            disabled={publishStatus === "publishing"}
+            className={`flex items-center gap-1 text-[11px] px-3 py-1 rounded font-medium transition-colors disabled:opacity-60 ${
+              publishStatus === "error" ? "bg-red-600 text-white" :
+              publishStatus === "published" || isLive ? "bg-green-700 text-green-200" :
+              "bg-green-600 hover:bg-green-500 text-white"
+            }`}
+            title={publishStatus === "error" ? publishError : ""}
+          >
+            {publishStatus === "publishing" ? <><Globe size={13} className="animate-spin" /> Publishing…</> :
+             publishStatus === "published" ? <><Check size={13} /> Published</> :
+             publishStatus === "error" ? <><AlertCircle size={13} /> Failed</> :
+             <><Globe size={13} /> Publish</>}
           </button>
           <button onClick={logout} className="p-1 text-gray-400 hover:text-red-400"><LogOut size={14} /></button>
         </div>
@@ -230,10 +228,10 @@ const AdminDashboard = () => {
         {/* ── Left Sidebar ── */}
         <div className="w-56 bg-gray-900 border-r border-gray-800 flex flex-col shrink-0">
           <div className="flex border-b border-gray-800 text-[11px]">
-            {(["pages", "blocks", "penpot", "io"] as const).map((t) => (
+            {(["pages", "blocks", "penpot"] as const).map((t) => (
               <button key={t} onClick={() => setLeftTab(t)}
                 className={`flex-1 py-2 font-medium capitalize transition-colors ${leftTab === t ? "text-blue-400 border-b-2 border-blue-400" : "text-gray-500 hover:text-gray-300"}`}>
-                {t === "io" ? "I/O" : t === "penpot" ? "PenPot" : t}
+                {t === "penpot" ? "PenPot" : t}
               </button>
             ))}
           </div>
@@ -308,20 +306,6 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            {/* I/O tab */}
-            {leftTab === "io" && (
-              <div className="p-3 space-y-3">
-                <button onClick={handleExport} className="w-full flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-[11px] py-2 rounded">
-                  <Download size={13} /> Export JSON
-                </button>
-                <label className="w-full flex items-center justify-center gap-1.5 bg-gray-800 hover:bg-gray-700 text-white text-[11px] py-2 rounded cursor-pointer border border-gray-700">
-                  <Upload size={13} /> Import JSON
-                  <input type="file" accept=".json" onChange={handleImport} className="hidden" />
-                </label>
-                {importStatus === "success" && <p className="text-green-400 text-[11px] flex items-center gap-1"><Check size={12} /> Imported</p>}
-                {importStatus === "error" && <p className="text-red-400 text-[11px] flex items-center gap-1"><AlertCircle size={12} /> Invalid file</p>}
-              </div>
-            )}
           </div>
         </div>
 

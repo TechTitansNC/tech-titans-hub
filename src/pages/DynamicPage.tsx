@@ -1,11 +1,22 @@
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getPublishedData, getSiteData } from "@/lib/siteData";
+import { getPublishedData, getSiteData, type SiteData } from "@/lib/siteData";
+import { getGitHubConfig, fetchPublishedFromGitHub } from "@/lib/githubSync";
 import PageLayout from "@/components/PageLayout";
 import BlockRenderer from "@/components/BlockRenderer";
 
 const DynamicPage = () => {
   const { slug } = useParams();
-  const data = getPublishedData() ?? getSiteData();
+  const [data, setData] = useState<SiteData>(() => getPublishedData() ?? getSiteData());
+
+  useEffect(() => {
+    const config = getGitHubConfig();
+    fetchPublishedFromGitHub(config).then((remote) => {
+      if (remote && (remote as SiteData).pages) {
+        setData(remote as SiteData);
+      }
+    });
+  }, []);
 
   const resolvedSlug = slug ? `/${slug}` : "/";
   const page = data.pages.find((p) => p.slug === resolvedSlug);
