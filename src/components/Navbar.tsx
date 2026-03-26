@@ -2,13 +2,15 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { getSiteData } from "@/lib/siteData";
+
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/team", label: "Team Members" },
+];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const data = getSiteData();
-  const navLinks = data.pages.filter((p) => p.showInNav).map((p) => ({ to: p.slug, label: p.title }));
 
   return (
     <motion.nav
