@@ -150,12 +150,12 @@ const Index = () => {
             className="text-center"
           >
             <a
-              href="https://github.com/Ak-dude/myarchepal-techtitans-prod"
+              href="https://www.archepal.com"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
-              View Archepal on GitHub <ArrowRight size={16} />
+              View Archepal <ArrowRight size={16} />
             </a>
           </motion.div>
         </div>
