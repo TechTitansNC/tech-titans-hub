@@ -120,13 +120,13 @@ const Index = () => {
             </p>
             <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">&nbsp;</p>       
             <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
-              ArchePal is more than software — it is a true Archaeologists’ Friend.
-                It helps researchers:
-                1. Reduce manual, repetitive work
-                2. Improve accuracy and efficiency
-                3. Work anywhere, even without internet
-                4. Generate new funding opportunities
-                5. Collaborate and share discoveries worldwide
+              ArchePal is more than software — it is a true Archaeologists’ Friend.<br />
+                It helps researchers:<br />
+                1. Reduce manual, repetitive work<br />
+                2. Improve accuracy and efficiency<br />
+                3. Work anywhere, even without internet<br />
+                4. Generate new funding opportunities<br />
+                5. Collaborate and share discoveries worldwide<br />
               ArchePal empowers the people who uncover humanity’s past by giving them the tools of the future.
             </p>
           </motion.div>
@@ -146,7 +146,7 @@ const Index = () => {
               className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               View Archepal <ArrowRight size={16} />
-            </a>
+            </a>&nbsp; 
             <a
               href="https://apps.apple.com/us/app/archepal/id6756281728"
               target="_blank"
