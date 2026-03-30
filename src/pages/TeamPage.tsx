@@ -3,14 +3,16 @@ import { User } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 
 const members = [
-  { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "6th", school: "Martin Middle School", fll: "5 years (2 years Explorer)" },
+  { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "6th", school: "Martin Middle", fll: "5 years (FLL-3,Explorer-2)" },
   { name: "Anish Rudrabhatla", photo: "/assets/Anish.png", grade: "5th", school: "Thales Academy", fll: "2 years" },
   { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "6th", school: "TMSA", fll: "3 years" },
   { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "8th", school: "TMSA", fll: "1st Year (Rookie)" },
   { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "6th", school: "TMSA", fll: "1st Year (Rookie)" },
-  { name: "Sachin Senthil Kumar", photo: "/assets/Sachin.png", grade: "8th", school: "Alston Ridge Middle", fll: "3 years" },
+  { name: "Sachin Senthil Kumar", photo: "/assets/Sachin.png", grade: "8th", school: "Alston Ridge", fll: "3 years" },
   { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "5th", school: "Thales Academy", fll: "3 years" },
   { name: "Yogi Desai", photo: "/assets/Yogi.png", grade: "8th", school: "TMSA", fll: "3 years" },
+  { name: "Aatmaja Mene", photo: "/assets/Aarush.png", grade: "9th", school: "Youth Mentor", fll: "4 years (FLL-2,FTC-2)" },
+  { name: "Atul Mene", photo: "/assets/Aarush.png", grade: "IBM, Master Inventor", school: "Head Coach", fll: "5 years" },
 ];
 
 const TeamPage = () => {
@@ -31,7 +33,7 @@ const TeamPage = () => {
             className="text-5xl md:text-7xl font-black mb-4"
             style={{ textShadow: "0 0 20px rgba(59,130,246,0.4)" }}
           >
-            Team <span className="text-blue-500">Members</span>
+            Our <span className="text-blue-500">Team</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
