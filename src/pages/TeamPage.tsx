@@ -11,8 +11,8 @@ const members = [
   { name: "Sachin Senthil Kumar", photo: "/assets/Sachin.png", grade: "8th", school: "Alston Ridge", fll: "3 years" },
   { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "5th", school: "Thales Academy", fll: "3 years" },
   { name: "Yogi Desai", photo: "/assets/Yogi.png", grade: "8th", school: "TMSA", fll: "3 years" },
-  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "9th", Role: "Youth Mentor", fll: "4 years (FLL-2, FTC-2)" },
-  { name: "Atul Mene", photo: "/assets/Atul.png", grade: "IBM, Master Inventor", school: "FLL Head Coach", fll: "5 years" },  
+  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "9th", role: "Youth Mentor", fll: "4 years (FLL-2, FTC-2)" },
+  { name: "Atul Mene", photo: "/assets/Atul.png", job: "IBM, Master Inventor", role: "FLL Head Coach", fll: "5 years" },
 ];
 
 const TeamPage = () => {
@@ -66,10 +66,12 @@ const TeamPage = () => {
               </div>
               <h3 className="text-lg font-bold text-white mb-3">{m.name}</h3>
               <div className="text-left space-y-1.5 border-t border-gray-700 pt-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Grade</span>
-                  <span className="text-white font-medium">{m.grade}</span>
-                </div>
+                {m.grade && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Grade</span>
+                    <span className="text-white font-medium">{m.grade}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm gap-2">
                   <span className="text-gray-500 shrink-0">School</span>
                   <span className="text-white font-medium text-right">{m.school}</span>
