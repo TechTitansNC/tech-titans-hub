@@ -11,8 +11,8 @@ const members = [
   { name: "Sachin Senthil Kumar", photo: "/assets/Sachin.png", grade: "8th", school: "Alston Ridge", fll: "3 years" },
   { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "5th", school: "Thales Academy", fll: "3 years" },
   { name: "Yogi Desai", photo: "/assets/Yogi.png", grade: "8th", school: "TMSA", fll: "3 years" },
-  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "9th", school: "Youth Mentor", fll: "4 years (FLL-2,FTC-2)" },
-  { name: "Atul Mene", photo: "/assets/Atul.png", grade: "IBM, Master Inventor", school: "Head Coach", fll: "5 years" },
+  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "9th", Role: "Youth Mentor", fll: "4 years (FLL-2,FTC-2)" },
+  { name: "Atul Mene", photo: "/assets/Atul.png", Company: "IBM, Master Inventor", Role: "Head Coach", fll: "5 years" },
 ];
 
 const TeamPage = () => {
