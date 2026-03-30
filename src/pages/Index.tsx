@@ -118,30 +118,20 @@ const Index = () => {
             <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
               A full-stack web and mobile app built by Tech Titans — combining AI, secure authentication, and cross-platform design to solve a real-world problem.
             </p>
+            <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">&nbsp;</p>       
+            <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
+              ArchePal is more than software — it is a true Archaeologists’ Friend.
+                It helps researchers:
+                1. Reduce manual, repetitive work
+                2. Improve accuracy and efficiency
+                3. Work anywhere, even without internet
+                4. Generate new funding opportunities
+                5. Collaborate and share discoveries worldwide
+              ArchePal empowers the people who uncover humanity’s past by giving them the tools of the future.
+            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {[
-              { icon: Bot, title: "Azure OpenAI", desc: "Not just AI — enterprise-grade Azure OpenAI. The same infrastructure powering billion-dollar products, now running inside a middle school innovation project." },
-              { icon: Smartphone, title: "React + Capacitor", desc: "One codebase. Web, iOS, Android. Built in TypeScript with React 18, TailwindCSS, and Capacitor — the exact stack used by top-tier engineering teams worldwide." },
-              { icon: Lightbulb, title: "Python FastAPI + Firebase", desc: "A blazing-fast async Python backend with Pydantic validation, Firebase auth, and CORS-protected APIs. Security and performance that most startups don't even bother with." },
-            ].map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-gray-800 border border-gray-700 hover:border-blue-500 rounded-xl p-6 transition-colors"
-              >
-                <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
-              </motion.div>
-            ))}
-          </div>
+
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -156,6 +146,14 @@ const Index = () => {
               className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               View Archepal <ArrowRight size={16} />
+            </a>
+            <a
+              href="https://apps.apple.com/us/app/archepal/id6756281728"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Get Archepal Mobile App for Apple Users<ArrowRight size={16} />
             </a>
           </motion.div>
         </div>
