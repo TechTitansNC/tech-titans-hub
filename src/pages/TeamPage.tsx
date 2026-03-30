@@ -33,7 +33,7 @@ const TeamPage = () => {
             className="text-5xl md:text-7xl font-black mb-4"
             style={{ textShadow: "0 0 20px rgba(59,130,246,0.4)" }}
           >
-            Team <span className="text-blue-500">Members</span>
+            Our <span className="text-blue-500">Team</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -41,7 +41,7 @@ const TeamPage = () => {
             transition={{ delay: 0.2 }}
             className="text-lg text-gray-400"
           >
-            Meet the people behind Tech Titans
+            Meet our Tech Titans family
           </motion.p>
         </div>
       </section>
