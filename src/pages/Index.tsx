@@ -7,6 +7,7 @@ const images = [
   "/assets/img1.JPG",
   "/assets/img2.JPG",
   "/assets/img3.jpg",
+  "/assets/img4.jpg",
 ];
 
 const Index = () => {
@@ -146,7 +147,7 @@ const Index = () => {
               className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               View Archepal <ArrowRight size={16} />
-            </a>&nbsp; 
+            </a>&nbsp;&nbsp;
             <a
               href="https://apps.apple.com/us/app/archepal/id6756281728"
               target="_blank"
