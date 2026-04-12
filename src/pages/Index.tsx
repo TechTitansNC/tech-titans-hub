@@ -7,7 +7,6 @@ const images = [
   "/assets/img1.JPG",
   "/assets/img2.JPG",
   "/assets/img3.jpg",
-  "/assets/img4.jpg",
 ];
 
 const Index = () => {
