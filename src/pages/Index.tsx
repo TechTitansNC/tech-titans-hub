@@ -7,6 +7,7 @@ const images = [
   "/assets/img1.JPG",
   "/assets/img2.JPG",
   "/assets/img3.jpg",
+  "/assets/Team_32795.jpg",
 ];
 
 const Index = () => {
