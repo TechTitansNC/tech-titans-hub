@@ -2,6 +2,31 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowRight, Lightbulb, Smartphone, Bot } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
+import React from "react";
+
+const APP_STORE_URL = "https://apps.apple.com/app/us/app/archepal/id6756281728";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.archepal.app";
+
+const styles: Record<string, React.CSSProperties> = {
+  apple: {
+    backgroundColor: "#000",
+    color: "#fff",
+    padding: "12px 20px",
+    borderRadius: "6px",
+    textDecoration: "none",
+    fontWeight: 600,
+  },
+  google: {
+    backgroundColor: "#34a853",
+    color: "#fff",
+    padding: "12px 20px",
+    borderRadius: "6px",
+    textDecoration: "none",
+    fontWeight: 600,
+  },
+};
+
+export default StoreButtons;
 
 const images = [
   "/assets/img1.JPG",
@@ -132,8 +157,6 @@ const Index = () => {
             </p>
           </motion.div>
 
-
-
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -148,12 +171,7 @@ const Index = () => {
             >
               View Archepal <ArrowRight size={16} />
             </a>&nbsp;&nbsp;
-            <a href="https://apps.apple.com/app/us/app/archepal/id6756281728" target="_blank">
-              <img src="apple-store-badge.png" alt="Download on the App Store" height="50">
-            </a>
-            
-            <a href="https://play.google.com/store/apps/details?id=com.archepal.app" target="_blank">
-              <img src="google-play-badge.png" alt="Get it on Google Play" height="50"> 
+
             <a href="https://apps.apple.com/us/app/archepal/id6756281728"
               target="_blank"
               rel="noopener noreferrer"
