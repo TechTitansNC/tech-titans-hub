@@ -2,31 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowRight, Lightbulb, Smartphone, Bot } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
-import React from "react";
-
-const APP_STORE_URL = "https://apps.apple.com/app/us/app/archepal/id6756281728";
-const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.archepal.app";
-
-const styles: Record<string, React.CSSProperties> = {
-  apple: {
-    backgroundColor: "#000",
-    color: "#fff",
-    padding: "12px 20px",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontWeight: 600,
-  },
-  google: {
-    backgroundColor: "#34a853",
-    color: "#fff",
-    padding: "12px 20px",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontWeight: 600,
-  },
-};
-
-export default StoreButtons;
 
 const images = [
   "/assets/img1.JPG",
