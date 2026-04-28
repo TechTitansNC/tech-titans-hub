@@ -148,8 +148,13 @@ const Index = () => {
             >
               View Archepal <ArrowRight size={16} />
             </a>&nbsp;&nbsp;
-            <a
-              href="https://apps.apple.com/us/app/archepal/id6756281728"
+            <a href="https://apps.apple.com/app/us/app/archepal/id6756281728" target="_blank">
+              <img src="apple-store-badge.png" alt="Download on the App Store" height="50">
+            </a>
+            
+            <a href="https://play.google.com/store/apps/details?id=com.archepal.app" target="_blank">
+              <img src="google-play-badge.png" alt="Get it on Google Play" height="50"> 
+            <a href="https://apps.apple.com/us/app/archepal/id6756281728"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
