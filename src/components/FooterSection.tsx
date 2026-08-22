@@ -9,7 +9,7 @@ const FooterSection = () => {
           Tech Titans
         </h3>
         <p className="text-sm text-gray-400">
-          FLL Team #32795
+          FTC Team # 27087, FLL Team #32795
         </p>
         <p className="text-sm text-gray-400 italic mt-1">
           "The future of the past is in our hands"
