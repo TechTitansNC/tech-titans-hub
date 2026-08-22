@@ -5,9 +5,10 @@ import { Menu, X, ChevronDown } from "lucide-react";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  {
-    label: "Our Team",
-    subLinks: [
+
+  { to: "/team", label: "Our Team" },
+  { 
+  subLinks: [
       { to: "/team/2026-2027-biobuzz", label: "2026-2027 Biobuzz" },
       { to: "/team/2025-2026-unearthed", label: "2025-2026 Unearthed" },
     ],
