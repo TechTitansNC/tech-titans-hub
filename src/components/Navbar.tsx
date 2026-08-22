@@ -5,12 +5,11 @@ import { Menu, X, ChevronDown } from "lucide-react";
 
 const navLinks = [
   { to: "/", label: "Home" },
-
-  { to: "/team", label: "Our Team" },
-  { 
-  subLinks: [
-      { to: "/team/2026-2027-biobuzz", label: "2026-2027 Biobuzz" },
-      { to: "/team/2025-2026-unearthed", label: "2025-2026 Unearthed" },
+  {
+    label: "Our Team",
+    subLinks: [
+      { to: "#", label: "2026-2027 Biobuzz" },
+      { to: "/team", label: "2025-2026 Unearthed" },
     ],
   },
   { to: "/news", label: "News" },
@@ -42,7 +41,7 @@ const Navbar = () => {
           {navLinks.map((link) => {
             if (link.subLinks) {
               const isSubActive = link.subLinks.some(
-                (sub) => location.pathname === sub.to
+                (sub) => sub.to !== "#" && location.pathname === sub.to
               );
 
               return (
@@ -53,6 +52,7 @@ const Navbar = () => {
                   onMouseLeave={() => setDropdownOpen(false)}
                 >
                   <button
+                    type="button"
                     className={`flex items-center gap-1 transition-colors ${
                       isSubActive ? "text-blue-400" : "text-gray-300 hover:text-blue-400"
                     }`}
@@ -66,7 +66,7 @@ const Navbar = () => {
                     />
                   </button>
 
-                  {/* Desktop Submenu Dropdown */}
+                  {/* Desktop Submenu */}
                   <AnimatePresence>
                     {dropdownOpen && (
                       <motion.div
@@ -78,10 +78,13 @@ const Navbar = () => {
                       >
                         {link.subLinks.map((sub) => (
                           <Link
-                            key={sub.to}
+                            key={sub.label}
                             to={sub.to}
+                            onClick={(e) => {
+                              if (sub.to === "#") e.preventDefault();
+                            }}
                             className={`block px-4 py-2 transition-colors ${
-                              location.pathname === sub.to
+                              sub.to !== "#" && location.pathname === sub.to
                                 ? "text-blue-400 bg-gray-700/50"
                                 : "text-gray-300 hover:text-blue-400 hover:bg-gray-700/50"
                             }`}
@@ -122,7 +125,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Navigation */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -137,6 +140,7 @@ const Navbar = () => {
                   return (
                     <div key={link.label} className="flex flex-col gap-2">
                       <button
+                        type="button"
                         onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
                         className="flex items-center justify-between w-full text-gray-300 hover:text-blue-400 transition-colors"
                       >
@@ -149,16 +153,21 @@ const Navbar = () => {
                         />
                       </button>
 
-                      {/* Mobile Submenu Accordion */}
                       {mobileSubmenuOpen && (
                         <div className="pl-4 flex flex-col gap-2 border-l border-gray-700 mt-1">
                           {link.subLinks.map((sub) => (
                             <Link
-                              key={sub.to}
+                              key={sub.label}
                               to={sub.to}
-                              onClick={() => setMobileOpen(false)}
+                              onClick={(e) => {
+                                if (sub.to === "#") {
+                                  e.preventDefault();
+                                } else {
+                                  setMobileOpen(false);
+                                }
+                              }}
                               className={`transition-colors ${
-                                location.pathname === sub.to
+                                sub.to !== "#" && location.pathname === sub.to
                                   ? "text-blue-400"
                                   : "text-gray-400 hover:text-blue-400"
                               }`}
