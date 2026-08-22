@@ -3,15 +3,15 @@ import { User } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 
 const members = [
-  { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "6th", school: "Martin Middle", fll: "5 years (FLL-3,Explorer-2)" },
-  { name: "Anish Rudrabhatla", photo: "/assets/Anish.png", grade: "5th", school: "Thales Academy", fll: "2 years" },
-  { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "6th", school: "TMSA", fll: "3 years" },
-  { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "8th", school: "TMSA", fll: "1st Year (Rookie)" },
-  { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "6th", school: "TMSA", fll: "1st Year (Rookie)" },
-  { name: "Sachin Senthil Kumar", photo: "/assets/Sachin.png", grade: "8th", school: "Alston Ridge", fll: "3 years" },
-  { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "5th", school: "Thales Academy", fll: "3 years" },
-  { name: "Yogi Desai", photo: "/assets/Yogi.png", grade: "8th", school: "TMSA", fll: "3 years" },
-  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "9th", school: "Youth Mentor", schoolLabel: "Role", fll: "4 years (FLL-2,FTC-2)" },
+  { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "7th", school: "Martin Middle", fll: "5 years (FLL-3,Explorer-2)" },
+  { name: "Aaryaman Raval", photo: "/assets/Aaryaman.png", grade: "10th", school: "Green Level High School", fll: "2 years" },
+  { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "7th", school: "TMSA", fll: "2 years" },
+  { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "9th", school: "Apex Friendship High School", fll: "1 Year" },
+  { name: "Dhanvin Vedamurthy", photo: "/assets/Dhanvin.png", grade: "10th", school: "Green Level High School", fll: "Rookie" },
+  { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "7th", school: "TMSA", fll: "1 Year" },
+  { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "6th", school: "Reedy Creek Middle School", fll: "3 years" },
+  { name: "Shreyas Dandu", photo: "/assets/Shreyas.png", grade: "7th", school: "Alston Ridge Middle School", fll: "2 years" },
+  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "10th", school: "Youth Mentor", schoolLabel: "Role", fll: "4 years (FLL-2,FTC-2)" },
   { name: "Atul Mene", photo: "/assets/Atul.png", grade: "IBM, Master Inventor", gradeLabel: "Title", school: "Head Coach", schoolLabel: "Role", fll: "5 years" },
 ];
 
@@ -75,7 +75,7 @@ const TeamPage = () => {
                   <span className="text-white font-medium text-right">{m.school}</span>
                 </div>
                 <div className="flex justify-between text-sm gap-2">
-                  <span className="text-gray-500 shrink-0">FLL Exp.</span>
+                  <span className="text-gray-500 shrink-0">FLL/FTC Exp.</span>
                   <span className="text-blue-400 font-medium text-right">{m.fll}</span>
                 </div>
               </div>
