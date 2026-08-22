@@ -8,6 +8,7 @@ const images = [
   "/assets/img2.JPG",
   "/assets/img3.jpg",
   "/assets/Team_32795.jpg",
+  "/assets/Team32795_World_Medals.jpg",
 ];
 
 const Index = () => {
