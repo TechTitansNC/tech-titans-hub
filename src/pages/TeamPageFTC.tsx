@@ -3,19 +3,19 @@ import { User } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 
 const members = [
-  { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "7th", school: "Martin Middle", fll/ftc: "5 years (FLL-3,Explorer-2)" },
-  { name: "Aaryaman Raval", photo: "/assets/Aaryaman.png", grade: "10th", school: "Green Level High School", fll/ftc: "2 years" },
-  { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "7th", school: "TMSA", fll/ftc: "2 years" },
-  { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "9th", school: "Apex Friendship High School", fll/ftc: "1 Year" },
-  { name: "Dhanvin Vedamurthy", photo: "/assets/Dhanvin.png", grade: "10th", school: "Green Level High School", fll/ftc: "Rookie" },
-  { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "7th", school: "TMSA", fll/ftc: "1 Year" },
-  { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "6th", school: "Reedy Creek Middle School", fll/ftc: "3 years" },
-  { name: "Shreyas Dandu", photo: "/assets/Shreyas.png", grade: "7th", school: "Alston Ridge Middle School", fll/ftc: "2 years" },
-  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "10th", school: "Youth Mentor", schoolLabel: "Role", fll/ftc: "4 years (FLL-2,FTC-2)" },
-  { name: "Atul Mene", photo: "/assets/Atul.png", grade: "IBM, Master Inventor", gradeLabel: "Title", school: "Head Coach", schoolLabel: "Role", fll/ftc: "5 years" },
+  { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "6th", school: "Martin Middle", fll: "5 years (FLL-3,Explorer-2)" },
+  { name: "Anish Rudrabhatla", photo: "/assets/Anish.png", grade: "5th", school: "Thales Academy", fll: "2 years" },
+  { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "6th", school: "TMSA", fll: "3 years" },
+  { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "8th", school: "TMSA", fll: "1st Year (Rookie)" },
+  { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "6th", school: "TMSA", fll: "1st Year (Rookie)" },
+  { name: "Sachin Senthil Kumar", photo: "/assets/Sachin.png", grade: "8th", school: "Alston Ridge", fll: "3 years" },
+  { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "5th", school: "Thales Academy", fll: "3 years" },
+  { name: "Yogi Desai", photo: "/assets/Yogi.png", grade: "8th", school: "TMSA", fll: "3 years" },
+  { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "9th", school: "Youth Mentor", schoolLabel: "Role", fll: "4 years (FLL-2,FTC-2)" },
+  { name: "Atul Mene", photo: "/assets/Atul.png", grade: "IBM, Master Inventor", gradeLabel: "Title", school: "Head Coach", schoolLabel: "Role", fll: "5 years" },
 ];
 
-const TeamPageFTC = () => {
+const TeamPage = () => {
   return (
     <PageLayout>
       <section className="bg-black text-white py-20 px-6">
@@ -25,7 +25,7 @@ const TeamPageFTC = () => {
             animate={{ opacity: 1 }}
             className="inline-block text-sm font-medium tracking-wider text-blue-400 border border-blue-500/50 px-4 py-1.5 rounded-full mb-6"
           >
-            FTC Team #27087
+            FLL Team #32795
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -87,4 +87,4 @@ const TeamPageFTC = () => {
   );
 };
 
-export default TeamPageFTC;
+export default TeamPage;
