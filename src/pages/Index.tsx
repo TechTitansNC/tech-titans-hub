@@ -48,14 +48,13 @@ const Index = () => {
             transition={{ delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300 italic"
           >
-            🚀 First Championship Houston, here we come!
+            🎉 What an unforgettable experience at FIRST Championship Houston!
             <br />
-            We're beyond excited to represent North Carolina at the FIRST
-            Championship in Houston!
+           We were beyond proud to represent North Carolina on the global stage.
             <br />
-            This journey has been incredible, and we're proud to carry our NC
-            state's spirit, innovation, and teamwork to the global stage. Let's
-            go make it count!
+            Bringing our state's spirit, innovation, and teamwork to Houston was a dream come true, 
+            and we are so grateful for everyone who supported us along the way. 
+            Thank you for being part of our journey!
           </motion.p>
         </div>
       </section>
