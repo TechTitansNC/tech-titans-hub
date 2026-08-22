@@ -7,8 +7,9 @@ const navLinks = [
   { to: "/", label: "Home" },
   {
     label: "Our Team",
+    to: "/team-ftc",
     subLinks: [
-      { to: "/teamftc", label: "2026-2027 Biobuzz" },
+      { to: "/team-ftc", label: "2026-2027 Biobuzz" },
       { to: "/team", label: "2025-2026 Unearthed" },
     ],
   },
