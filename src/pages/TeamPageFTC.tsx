@@ -25,7 +25,7 @@ const TeamPage = () => {
             animate={{ opacity: 1 }}
             className="inline-block text-sm font-medium tracking-wider text-blue-400 border border-blue-500/50 px-4 py-1.5 rounded-full mb-6"
           >
-            FLL Team #32795
+            FTC Team #27087
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
