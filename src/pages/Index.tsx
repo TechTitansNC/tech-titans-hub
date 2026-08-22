@@ -50,10 +50,13 @@ const Index = () => {
           >
             🎉 What an unforgettable experience at FIRST Championship Houston!
             <br />
+            <br />
            We were beyond proud to represent North Carolina on the global stage.
+            <br />
             <br />
             Bringing our state's spirit, innovation, and teamwork to Houston was a dream come true, 
             and we are so grateful for everyone who supported us along the way. 
+            <br />
             Thank you for being part of our journey!
           </motion.p>
         </div>
