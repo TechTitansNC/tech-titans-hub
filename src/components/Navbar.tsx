@@ -42,7 +42,7 @@ const Navbar = () => {
           {navLinks.map((link) => {
             if (link.subLinks) {
               const isSubActive = link.subLinks.some(
-                (sub) => sub.to !== "#" && location.pathname === sub.to
+                (sub) => location.pathname === sub.to
               );
 
               return (
@@ -52,10 +52,12 @@ const Navbar = () => {
                   onMouseEnter={() => setDropdownOpen(true)}
                   onMouseLeave={() => setDropdownOpen(false)}
                 >
-                  <button
-                    type="button"
+                  <Link
+                    to={link.to}
                     className={`flex items-center gap-1 transition-colors ${
-                      isSubActive ? "text-blue-400" : "text-gray-300 hover:text-blue-400"
+                      isSubActive || location.pathname === link.to
+                        ? "text-blue-400"
+                        : "text-gray-300 hover:text-blue-400"
                     }`}
                   >
                     {link.label}
@@ -65,9 +67,9 @@ const Navbar = () => {
                         dropdownOpen ? "rotate-180" : ""
                       }`}
                     />
-                  </button>
+                  </Link>
 
-                  {/* Desktop Submenu */}
+                  {/* Dropdown Menu */}
                   <AnimatePresence>
                     {dropdownOpen && (
                       <motion.div
@@ -81,11 +83,8 @@ const Navbar = () => {
                           <Link
                             key={sub.label}
                             to={sub.to}
-                            onClick={(e) => {
-                              if (sub.to === "#") e.preventDefault();
-                            }}
                             className={`block px-4 py-2 transition-colors ${
-                              sub.to !== "#" && location.pathname === sub.to
+                              location.pathname === sub.to
                                 ? "text-blue-400 bg-gray-700/50"
                                 : "text-gray-300 hover:text-blue-400 hover:bg-gray-700/50"
                             }`}
@@ -126,7 +125,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -140,19 +139,31 @@ const Navbar = () => {
                 if (link.subLinks) {
                   return (
                     <div key={link.label} className="flex flex-col gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
-                        className="flex items-center justify-between w-full text-gray-300 hover:text-blue-400 transition-colors"
-                      >
-                        <span>{link.label}</span>
-                        <ChevronDown
-                          size={16}
-                          className={`transition-transform duration-200 ${
-                            mobileSubmenuOpen ? "rotate-180" : ""
+                      <div className="flex items-center justify-between w-full">
+                        <Link
+                          to={link.to}
+                          onClick={() => setMobileOpen(false)}
+                          className={`transition-colors ${
+                            location.pathname === link.to
+                              ? "text-blue-400"
+                              : "text-gray-300 hover:text-blue-400"
                           }`}
-                        />
-                      </button>
+                        >
+                          {link.label}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
+                          className="text-gray-400 p-1"
+                        >
+                          <ChevronDown
+                            size={16}
+                            className={`transition-transform duration-200 ${
+                              mobileSubmenuOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
 
                       {mobileSubmenuOpen && (
                         <div className="pl-4 flex flex-col gap-2 border-l border-gray-700 mt-1">
@@ -160,15 +171,9 @@ const Navbar = () => {
                             <Link
                               key={sub.label}
                               to={sub.to}
-                              onClick={(e) => {
-                                if (sub.to === "#") {
-                                  e.preventDefault();
-                                } else {
-                                  setMobileOpen(false);
-                                }
-                              }}
+                              onClick={() => setMobileOpen(false)}
                               className={`transition-colors ${
-                                sub.to !== "#" && location.pathname === sub.to
+                                location.pathname === sub.to
                                   ? "text-blue-400"
                                   : "text-gray-400 hover:text-blue-400"
                               }`}
