@@ -207,4 +207,4 @@ const StatusPage = () => {
   );
 };
 
-export default StatusPage;
+export default Team Status;
