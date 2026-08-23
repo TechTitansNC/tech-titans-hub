@@ -82,7 +82,7 @@ const TeamStatus = () => {
             animate={{ opacity: 1 }}
             className="inline-block text-sm font-medium tracking-wider text-blue-400 border border-blue-500/50 px-4 py-1.5 rounded-full mb-6"
           >
-            FLL Team #32795
+            FTC Team #27087, FLL Team #32795
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,7 @@ const TeamStatus = () => {
             className="text-5xl md:text-7xl font-black mb-4"
             style={{ textShadow: "0 0 20px rgba(59,130,246,0.4)" }}
           >
-            Team <span className="text-blue-500">Status</span> & History
+            Our <span className="text-blue-500">Journey</span> & Achievements
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
