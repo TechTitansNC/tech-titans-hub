@@ -10,7 +10,7 @@ import TeamPageFTC from "./pages/TeamPageFTC.tsx";
 import NewsPage from "./pages/NewsPage.tsx";
 import LeaderboardPage from "./pages/LeaderboardPage.tsx";
 import SurveyPage from "./pages/SurveyPage.tsx";
-import Team Status from "./pages/Team Status.tsx";
+import TeamStatus from "./pages/TeamStatus.tsx";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +27,7 @@ const App = () => (
           <Route path="/news" element={<NewsPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/survey" element={<SurveyPage />} />
-          <Route path="/team-status" element={<Team Status />} />
+          <Route path="/team-status" element={<TeamStatus />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
