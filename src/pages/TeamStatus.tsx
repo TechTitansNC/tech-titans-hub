@@ -71,7 +71,7 @@ const journeyMilestones = [
   },
 ];
 
-const StatusPage = () => {
+const TeamStatus = () => {
   return (
     <PageLayout>
       {/* Hero Header */}
