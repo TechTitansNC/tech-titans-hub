@@ -16,6 +16,12 @@ const innovationProjects = [
       "Developed an app to help archeologists in the field and in the lab.",
   },
   {
+    season: "2025-2026",
+    title: "Unearthed / PermzPlus Library
+    description:
+       "Developed a library for people and archeologists to explore, and has also been explored by a research team in Silicon Valley.",
+  },
+  {
     season: "2024–2025",
     title: "Submerged / Turtle Deterent Device",
     description:
