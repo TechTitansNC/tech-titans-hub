@@ -13,10 +13,10 @@ const navLinks = [
       { to: "/team", label: "2025-2026 Unearthed" },
     ],
   },
+  { to: "/team-status", label: "Our Journey" },
   { to: "/news", label: "News" },
   { to: "/leaderboard", label: "Leaderboard" },
   { to: "/survey", label: "Survey" },
-  { to: "/team-status", label: "Our Journey" },
 ];
 
 const Navbar = () => {
