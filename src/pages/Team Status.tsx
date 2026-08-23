@@ -1,186 +1,210 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Team Status & History</title>
-  <style>
-    :root {
-      --primary: #2563eb;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --accent: #f59e0b;
-    }
+import { motion } from "framer-motion";
+import { Lightbulb, Trophy, Compass, Award } from "lucide-react";
+import PageLayout from "@/components/PageLayout";
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      color: var(--text);
-      background-color: var(--bg);
-      margin: 0;
-      padding: 2rem 1rem;
-    }
+const innovationProjects = [
+  {
+    season: "2025–2026",
+    title: "Submerged / Marine Energy Monitor",
+    description:
+      "Developed a prototype sensor array to monitor tidal flow power usage and reduce local ocean energy footprint.",
+  },
+  {
+    season: "2024–2025",
+    title: "Masterpiece / Eco-Acoustic Panel",
+    description:
+      "Designed low-cost acoustic soundproofing using recycled community materials for school performance spaces.",
+  },
+  {
+    season: "2023–2024",
+    title: "SUPERPOWERED / Smart Grid Node",
+    description:
+      "Created an automated load-balancing simulator for local clean energy distribution.",
+  },
+];
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+const seasonAwards = [
+  {
+    season: "2025–2026",
+    awards: [
+      "1st Place - Innovation Project Award",
+      "Global Innovation Nominee",
+      "Robot Performance Finalist",
+    ],
+  },
+  {
+    season: "2024–2025",
+    awards: [
+      "Engineering Excellence Award",
+      "2nd Place - State Championship",
+      "Core Values Award",
+    ],
+  },
+  {
+    season: "2023–2024",
+    awards: [
+      "Breakthrough Award",
+      "1st Place - Regional Qualifier",
+      "Motivate Award",
+    ],
+  },
+];
 
-    header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
+const journeyMilestones = [
+  {
+    year: "2025–2026",
+    title: "Expanding Our Reach",
+    description:
+      "Grew team membership, established secondary school mentorship programs, and published open-source CAD designs for rookie teams.",
+  },
+  {
+    year: "2024–2025",
+    title: "Refining Engineering Standards",
+    description:
+      "Transitioned to full custom 3D-printed attachments, standardized sensor calibration routines, and reached State Finals.",
+  },
+  {
+    year: "2023–2024",
+    title: "The Founding Season",
+    description:
+      "Formed Tech Titans #32795, built our dedicated pit area, and secured our first regional competition victory.",
+  },
+];
 
-    h1 { margin-bottom: 0.5rem; }
-    .subtitle { color: var(--text-muted); }
+const StatusPage = () => {
+  return (
+    <PageLayout>
+      {/* Hero Header */}
+      <section className="bg-black text-white py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="inline-block text-sm font-medium tracking-wider text-blue-400 border border-blue-500/50 px-4 py-1.5 rounded-full mb-6"
+          >
+            FLL Team #32795
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-7xl font-black mb-4"
+            style={{ textShadow: "0 0 20px rgba(59,130,246,0.4)" }}
+          >
+            Team <span className="text-blue-500">Status</span> & History
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-gray-400"
+          >
+            Our past 3 seasons of Innovation Projects, Awards, and Journey
+          </motion.p>
+        </div>
+      </section>
 
-    .section-title {
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 0.5rem;
-      margin-top: 3rem;
-      margin-bottom: 1.5rem;
-    }
+      {/* Main Content */}
+      <section className="bg-gray-900 py-16 px-6 text-white space-y-16">
+        <div className="max-w-5xl mx-auto space-y-16">
+          {/* Section 1: Innovation Projects */}
+          <div>
+            <div className="flex items-center gap-3 mb-8">
+              <Lightbulb className="w-8 h-8 text-blue-400" />
+              <h2 className="text-2xl md:text-3xl font-bold">
+                Innovation Projects
+              </h2>
+            </div>
+            <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6">
+              {innovationProjects.map((proj, i) => (
+                <motion.div
+                  key={proj.season}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="border-2 border-gray-700 hover:border-blue-500 rounded-xl p-6 transition-colors bg-black/40 flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-1 rounded-md mb-3">
+                      {proj.season}
+                    </span>
+                    <h3 className="text-xl font-bold mb-2">{proj.title}</h3>
+                    <p className="text-sm text-gray-400">{proj.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
 
-    /* Grid Layout for Cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
+          {/* Section 2: Awards */}
+          <div>
+            <div className="flex items-center gap-3 mb-8">
+              <Trophy className="w-8 h-8 text-blue-400" />
+              <h2 className="text-2xl md:text-3xl font-bold">Season Awards</h2>
+            </div>
+            <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6">
+              {seasonAwards.map((item, i) => (
+                <motion.div
+                  key={item.season}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="border-2 border-gray-700 hover:border-blue-500 rounded-xl p-6 transition-colors bg-black/40"
+                >
+                  <span className="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-1 rounded-md mb-4">
+                    {item.season}
+                  </span>
+                  <ul className="space-y-3">
+                    {item.awards.map((award, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2 text-sm text-gray-200"
+                      >
+                        <Award className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                        <span>{award}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              ))}
+            </div>
+          </div>
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
+          {/* Section 3: Team Journey Timeline */}
+          <div>
+            <div className="flex items-center gap-3 mb-8">
+              <Compass className="w-8 h-8 text-blue-400" />
+              <h2 className="text-2xl md:text-3xl font-bold">Our Journey</h2>
+            </div>
+            <div className="relative border-l-2 border-gray-700 ml-4 pl-6 space-y-8">
+              {journeyMilestones.map((milestone, i) => (
+                <motion.div
+                  key={milestone.year}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="relative"
+                >
+                  <div className="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-blue-500 border-4 border-gray-900" />
+                  <span className="text-xs font-bold text-blue-400 tracking-wider uppercase">
+                    {milestone.year}
+                  </span>
+                  <h3 className="text-xl font-bold mt-1 text-white">
+                    {milestone.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm mt-1 max-w-2xl">
+                    {milestone.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </PageLayout>
+  );
+};
 
-    .season-badge {
-      display: inline-block;
-      background: #dbeafe;
-      color: var(--primary);
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Timeline for Journey */
-    .timeline {
-      position: relative;
-      padding-left: 1.5rem;
-      border-left: 2px solid #cbd5e1;
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 2rem;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1.95rem;
-      top: 0.3rem;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-
-    .award-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .award-list li {
-      margin-bottom: 0.5rem;
-      padding-left: 1.2rem;
-      position: relative;
-    }
-
-    .award-list li::before {
-      content: '🏆';
-      position: absolute;
-      left: 0;
-      font-size: 0.9rem;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <header>
-      <h1>Team Status & History</h1>
-      <p class="subtitle">A look back at our last three seasons of innovation, awards, and growth.</p>
-    </header>
-
-    <!-- Innovation Projects -->
-    <h2 class="section-title">💡 Innovation Projects</h2>
-    <div class="grid">
-      <div class="card">
-        <span class="season-badge">Season 2025-2026</span>
-        <h3>Smart Energy Monitor</h3>
-        <p>Developed an IoT sensor system to help local small businesses track and optimize idle power usage in real time.</p>
-      </div>
-      <div class="card">
-        <span class="season-badge">Season 2024-2025</span>
-        <h3>Eco-Filter Water Basin</h3>
-        <p>Designed a portable, low-cost filtration unit using natural coconut husk charcoal for outdoor recreation areas.</p>
-      </div>
-      <div class="card">
-        <span class="season-badge">Season 2023-2024</span>
-        <h3>Community Cargo Pod</h3>
-        <p>Engineered an aerodynamic cargo attachment for municipal bicycles to encourage local eco-friendly deliveries.</p>
-      </div>
-    </div>
-
-    <!-- Awards & Recognitions -->
-    <h2 class="section-title">🏆 Season Awards</h2>
-    <div class="grid">
-      <div class="card">
-        <span class="season-badge">2025-2026</span>
-        <ul class="award-list">
-          <li>1st Place - Innovation Project Award</li>
-          <li>Finalist - Robot Performance</li>
-        </ul>
-      </div>
-      <div class="card">
-        <span class="season-badge">2024-2025</span>
-        <ul class="award-list">
-          <li>Engineering Excellence Award</li>
-          <li>2nd Place - Regional Championship</li>
-        </ul>
-      </div>
-      <div class="card">
-        <span class="season-badge">2023-2024</span>
-        <ul class="award-list">
-          <li>Core Values Award</li>
-          <li>Best Rookie Team Mentor</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Team Journey Timeline -->
-    <h2 class="section-title">🚀 Our Journey</h2>
-    <div class="timeline">
-      <div class="timeline-item">
-        <h3>2025 - Expanding Impact</h3>
-        <p>Grew the team from 6 to 10 members and launched outreach workshops teaching robotics and CAD modeling to 50+ middle school students.</p>
-      </div>
-      <div class="timeline-item">
-        <h3>2024 - Rebuilding & Redesigning</h3>
-        <p>Shifted focus toward custom 3D-printed components, standardizing our design process and improving prototype reliability.</p>
-      </div>
-      <div class="timeline-item">
-        <h3>2023 - The Foundation</h3>
-        <p>Established the team, built our first competition workspace, and competed in our very first regional qualifier.</p>
-      </div>
-    </div>
-  </div>
-
-</body>
-</html>
+export default StatusPage;
