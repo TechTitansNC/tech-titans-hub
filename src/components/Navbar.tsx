@@ -16,6 +16,7 @@ const navLinks = [
   { to: "/news", label: "News" },
   { to: "/leaderboard", label: "Leaderboard" },
   { to: "/survey", label: "Survey" },
+  { to: "/team-status", label: "Team Status" },
 ];
 
 const Navbar = () => {
