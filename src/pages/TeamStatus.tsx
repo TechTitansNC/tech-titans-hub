@@ -27,25 +27,25 @@ const seasonAwards = [
   {
     season: "2025–2026",
     awards: [
-      "1st Place - Innovation Project Award",
-      "Global Innovation Nominee",
-      "Robot Performance Finalist",
+      "Regionals - 1st Place Core Values Award",
+      "States - 2nd Place Champions Award",
+      "Experience of representing NC at the worlds FIRST Championship in Houston",
     ],
   },
   {
     season: "2024–2025",
     awards: [
-      "Engineering Excellence Award",
-      "2nd Place - State Championship",
-      "Core Values Award",
+      "Regionals - 1st Place Core Values Award",
+      "States - 1st Place Innovation Project Award",
+      "Experience of representing NC at the international WPI Event in Boston - Robot Design Award",
     ],
   },
   {
     season: "2023–2024",
     awards: [
-      "Breakthrough Award",
-      "1st Place - Regional Qualifier",
-      "Motivate Award",
+      "Advanced past Regionals",
+      "Advanced past Semi-Finals",
+      "Advanced To States for a good first year experience",
     ],
   },
 ];
