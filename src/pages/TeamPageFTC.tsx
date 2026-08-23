@@ -9,6 +9,7 @@ const members = [
   { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "9th", school: "Apex Friendship High School", fll: "1 Year" },
   { name: "Dhanvin Vedamurthy", photo: "/assets/Dhanvin.png", grade: "10th", school: "Green Level High School", fll: "Rookie" },
   { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "7th", school: "TMSA", fll: "1 Year" },
+  { name: "Shanaya Gupta", photo: "/assets/Shanaya.png", grade: "10th", school: "Green Level High School", fll: "Rookie" },
   { name: "Shreyan Sharma", photo: "/assets/Shreyan.png", grade: "6th", school: "Reedy Creek Middle School", fll: "3 years" },
   { name: "Shreyas Dandu", photo: "/assets/Shreyas.png", grade: "7th", school: "Alston Ridge Middle School", fll: "2 years" },
   { name: "Aatmaja Mene", photo: "/assets/Aatmaja.png", grade: "10th", school: "Youth Mentor", schoolLabel: "Role", fll: "4 years (FLL-2,FTC-2)" },
