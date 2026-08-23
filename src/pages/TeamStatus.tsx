@@ -5,21 +5,21 @@ import PageLayout from "@/components/PageLayout";
 const innovationProjects = [
   {
     season: "2025–2026",
-    title: "Submerged / Marine Energy Monitor",
+    title: "Unearthed / Archepal",
     description:
-      "Developed a prototype sensor array to monitor tidal flow power usage and reduce local ocean energy footprint.",
+      "Developed an app to help archeologists in the field and in the lab.",
   },
   {
     season: "2024–2025",
-    title: "Masterpiece / Eco-Acoustic Panel",
+    title: "Submerged / Turtle Deterent Device",
     description:
-      "Designed low-cost acoustic soundproofing using recycled community materials for school performance spaces.",
+      "Designed and created a device which tracks lights and sound frequency to deter sea turtles away from fishing nets.",
   },
   {
     season: "2023–2024",
-    title: "SUPERPOWERED / Smart Grid Node",
+    title: "Masterpiece / Hologram Performer",
     description:
-      "Created an automated load-balancing simulator for local clean energy distribution.",
+      "Created a hologram performer to help people around the world to enjoy a 3D experience of matches and performances without traveling long distances.",
   },
 ];
 
