@@ -4,6 +4,12 @@ import PageLayout from "@/components/PageLayout";
 
 const innovationProjects = [
   {
+    season: "2026-2027",
+    title: "BIOBUZZ / DUM E Mechanism Library",
+    description:
+      "This is a mechanism library to help you with your robot.",
+  },
+  {
     season: "2025–2026",
     title: "Unearthed / Archepal",
     description:
@@ -111,7 +117,7 @@ const TeamStatus = () => {
             <div className="flex items-center gap-3 mb-8">
               <Lightbulb className="w-8 h-8 text-blue-400" />
               <h2 className="text-2xl md:text-3xl font-bold">
-                Innovation Projects
+                Our Innovations
               </h2>
             </div>
             <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6">
