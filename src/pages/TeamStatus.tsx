@@ -17,7 +17,7 @@ const innovationProjects = [
   },
   {
     season: "2025-2026",
-    title: "Unearthed / PermzPlus Library
+    title: "Unearthed / PermzPlus Library",
     description:
        "Developed a library for people and archeologists to explore, and has also been explored by a research team in Silicon Valley.",
   },
