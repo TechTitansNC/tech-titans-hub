@@ -4,9 +4,9 @@ import PageLayout from "@/components/PageLayout";
 
 const members = [
   { name: "Aarush Mene", photo: "/assets/Aarush.png", grade: "7th", school: "Martin Middle", fll: "5 years (FLL-3,Explorer-2)" },
-  { name: "Arya Sinha", photo: "/assets/Arya.png", grade: "9th", school: "Wake STEM Early College", fll: "Rookie" },
-  { name: "Aaryaman Raval", photo: "/assets/Aaryaman.png", grade: "10th", school: "Green Level High School", fll: "2 years" },
   { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "7th", school: "TMSA", fll: "2 years" },
+  { name: "Arya Sinha", photo: "/assets/Arya.png", grade: "9th", school: "Wake STEM Early College", fll: "Rookie" },
+  { name: "Aryaman Raval", photo: "/assets/Aaryaman.png", grade: "10th", school: "Green Level High School", fll: "2 years" },
   { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "9th", school: "Apex Friendship High School", fll: "1 Year" },
   { name: "Dhanvin Vedamurthy", photo: "/assets/Dhanvin.png", grade: "10th", school: "Green Level High School", fll: "Rookie" },
   { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "7th", school: "TMSA", fll: "1 Year" },
