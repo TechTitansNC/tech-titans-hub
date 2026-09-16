@@ -34,8 +34,7 @@ const Navbar = () => {
     >
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-white">Tech Titans</span>
-          <span className="text-sm text-blue-400">#32795</span>
+          <span className="text-2xl font-bold text-white">Tech Titans NC</span>
         </Link>
 
         {/* Desktop Navigation */}
