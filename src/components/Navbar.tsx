@@ -15,8 +15,7 @@ const navLinks = [
   },
   { to: "/team-status", label: "Our Journey" },
   { to: "/news", label: "News" },
-  { to: "/leaderboard", label: "Leaderboard" },
-  { to: "/survey", label: "Survey" },
+  { to: "/firstpit", label: "FirstPit" },
 ];
 
 const Navbar = () => {
