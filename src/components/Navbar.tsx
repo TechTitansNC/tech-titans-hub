@@ -15,7 +15,7 @@ const navLinks = [
   },
   { to: "/team-status", label: "Our Journey" },
   { to: "/news", label: "News" },
-  { to: "www.first-pit.com", label: "FirstPit" },
+  { to: "https://www.first-pit.com", label: "FirstPit", isExternal: true },
 ];
 
 const Navbar = () => {
