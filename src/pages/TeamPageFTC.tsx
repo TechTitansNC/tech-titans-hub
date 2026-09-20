@@ -7,7 +7,7 @@ const members = [
   { name: "Arjun Katta", photo: "/assets/ArjunKatta.png", grade: "7th", school: "TMSA", fll: "2 years" },
   { name: "Arya Sinha", photo: "/assets/Arya.jpg", grade: "9th", school: "Wake STEM Early College", fll: "Rookie" },
   { name: "Aryaman Raval", photo: "/assets/Aaryaman.png", grade: "10th", school: "Green Level High School", fll: "2 years" },
-  { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "9th", school: "Apex Friendship High School", fll: "1 Year" },
+  { name: "Atharv Pardeshi", photo: "/assets/Atharv.png", grade: "9th", school: "TMSA", fll: "1 Year" },
   { name: "Dhanvin Vedamurthy", photo: "/assets/Dhanvin.png", grade: "10th", school: "Green Level High School", fll: "Rookie" },
   { name: "Prakhar Purohit", photo: "/assets/Prakhar.png", grade: "7th", school: "TMSA", fll: "1 Year" },
   { name: "Shanaya Gupta", photo: "/assets/Shanaya.jpg", grade: "10th", school: "Green Level High School", fll: "Rookie" },
